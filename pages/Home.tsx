@@ -9,8 +9,7 @@ import {
   ChevronRight,
   Zap,
   Star,
-  Handshake,
-  ArrowRight
+  Handshake
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 
@@ -133,45 +132,35 @@ export default function Home() {
       </section>
 
       {/* Franchise CTA Section */}
-      <section className="py-24 bg-zinc-950 relative overflow-hidden">
-        <div className="absolute top-1/2 left-0 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full"></div>
+      <section className="py-32 bg-zinc-950 relative overflow-hidden">
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px]"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="bg-gradient-to-br from-zinc-900 to-black p-12 md:p-20 rounded-[3rem] border border-white/5 shadow-3xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <div className="inline-flex items-center space-x-2 text-purple-400 mb-6 bg-purple-600/10 px-4 py-2 rounded-full border border-purple-500/20">
-                  <Handshake size={20} />
-                  <span className="text-sm font-bold uppercase tracking-widest">Success Partnership</span>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-8 leading-tight">
-                  <span className="text-purple-500">정직</span>으로 증명하는<br />성공의 가치
-                </h2>
-                <p className="text-zinc-400 text-lg mb-10 leading-relaxed">
-                  {settings.siteName}의 검증된 수익 모델과 전문 교육 시스템을 통해<br className="hidden md:block"/>
-                  모바일 비즈니스의 새로운 표준을 경험하세요.
-                </p>
-                <Link to="/franchise" className="inline-flex items-center space-x-3 px-10 py-5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 group shadow-lg shadow-purple-600/20">
-                  <span>창업 상세정보 확인하기</span>
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                </Link>
+          <div className="bg-gradient-to-br from-zinc-900 to-black p-12 md:p-20 rounded-[3rem] border border-purple-900/30 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div className="max-w-2xl text-center md:text-left">
+              <div className="inline-flex items-center space-x-2 text-purple-400 font-bold mb-6">
+                <Handshake size={24} />
+                <span className="uppercase tracking-[0.2em] text-sm">Franchise Partnership</span>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-8 rounded-3xl bg-zinc-800/50 border border-white/5 flex flex-col items-center text-center">
-                  <span className="text-4xl font-black text-purple-500 mb-2">98%</span>
-                  <span className="text-zinc-400 text-sm font-bold">가맹점 만족도</span>
-                </div>
-                <div className="p-8 rounded-3xl bg-zinc-800/50 border border-white/5 flex flex-col items-center text-center">
-                  <span className="text-4xl font-black text-purple-500 mb-2">1:1</span>
-                  <span className="text-zinc-400 text-sm font-bold">전담 매니징</span>
-                </div>
-                <div className="col-span-2 p-8 rounded-3xl bg-zinc-800/50 border border-white/5 flex items-center justify-between">
-                  <div className="text-left">
-                    <div className="text-xl font-bold text-white">전국 상권 분석 지원</div>
-                    <div className="text-zinc-500 text-sm">최적의 입지 선정을 위한 데이터 지원</div>
-                  </div>
-                  <TrendingUp className="text-purple-500" size={40} />
-                </div>
-              </div>
+              <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter leading-tight">
+                바를정 핸드폰과 함께할<br />
+                <span className="text-purple-500">성공 파트너</span>를 모십니다.
+              </h2>
+              <p className="text-zinc-400 text-lg md:text-xl leading-relaxed mb-10">
+                투명한 정산, 압도적 물량 지원, 상권 보호까지.<br />
+                휴대폰 매장 창업의 가장 정직한 길을 제안합니다.
+              </p>
+              <Link to="/franchise" className="inline-flex items-center space-x-3 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-2xl font-bold transition-all transform hover:translate-x-2">
+                <span>창업 안내 바로가기</span>
+                <ChevronRight size={20} />
+              </Link>
+            </div>
+            <div className="w-full max-w-sm aspect-square bg-zinc-800/50 rounded-[3rem] border border-white/5 flex items-center justify-center p-12 relative">
+               <div className="absolute inset-0 bg-purple-600/5 animate-pulse rounded-[3rem]"></div>
+               <Handshake size={160} className="text-purple-500/20" />
+               <div className="absolute -top-4 -right-4 bg-purple-600 text-white p-6 rounded-3xl font-black text-center shadow-xl shadow-purple-600/20">
+                 <div className="text-xs uppercase opacity-80 mb-1">Success Rate</div>
+                 <div className="text-3xl">98.5%</div>
+               </div>
             </div>
           </div>
         </div>

@@ -15,6 +15,11 @@ import {
   CheckCircle2,
   Image as ImageIcon,
   Upload,
+  Smartphone as SmartphoneIcon,
+  Sparkles,
+  Zap,
+  Cpu,
+  Monitor,
   Handshake,
   MessageSquare,
   ChevronDown,
@@ -23,12 +28,7 @@ import {
   MapPin,
   Award,
   Users,
-  Smartphone as SmartphoneIcon,
   Mail,
-  Sparkles,
-  Zap,
-  Cpu,
-  Monitor,
   Eye
 } from 'lucide-react';
 import { useGlobalState } from '../App';
@@ -108,7 +108,7 @@ const DashboardHome = () => {
 };
 
 const FranchiseManagement = () => {
-  const { settings, franchiseSettings, updateFranchiseSettings, inquiries, updateInquiries } = useGlobalState();
+  const { franchiseSettings, updateFranchiseSettings, inquiries, updateInquiries } = useGlobalState();
   const [localSettings, setLocalSettings] = useState<FranchiseSettings>(franchiseSettings);
   const [activeTab, setActiveTab] = useState<'content' | 'inquiries'>('content');
   const [expandedInquiry, setExpandedInquiry] = useState<string | null>(null);
@@ -153,44 +153,14 @@ const FranchiseManagement = () => {
         <div className="grid grid-cols-1 xl:grid-cols-5 gap-8 items-start">
           <div className="xl:col-span-3 space-y-8">
             <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-6">
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-purple-400">메인 섹션 및 이메일 설정</h3>
-                <div className="flex items-center space-x-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                  <span>Live Editing Mode</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">문의 수신 이메일 (상담 신청 전송 대상)</label>
-                  <div className="relative">
-                    <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-500" />
-                    <input 
-                      type="email"
-                      value={localSettings.contactEmail}
-                      onChange={e => setLocalSettings({...localSettings, contactEmail: e.target.value})}
-                      className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 pl-12 text-white focus:outline-none focus:border-purple-500 text-sm font-mono"
-                      placeholder="rhehfrh@hanmail.net"
-                    />
-                  </div>
-                  <p className="text-[10px] text-zinc-600 px-1 mt-1">※ 고객이 상담 폼 작성 시 위 주소로 이메일 발송 창이 열립니다.</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">메인 타이틀</label>
-                  <textarea 
-                    value={localSettings.heroTitle}
-                    onChange={e => setLocalSettings({...localSettings, heroTitle: e.target.value})}
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500 h-24 text-sm resize-none"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">서브텍스트</label>
-                  <textarea 
-                    value={localSettings.heroSubtitle}
-                    onChange={e => setLocalSettings({...localSettings, heroSubtitle: e.target.value})}
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500 h-32 text-sm resize-none"
-                  />
-                </div>
+              <h3 className="text-xl font-bold text-purple-400">메인 섹션 설정</h3>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">서브텍스트</label>
+                <textarea 
+                  value={localSettings.heroSubtitle}
+                  onChange={e => setLocalSettings({...localSettings, heroSubtitle: e.target.value})}
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500 h-32 text-sm resize-none"
+                />
               </div>
             </div>
 
@@ -199,17 +169,12 @@ const FranchiseManagement = () => {
               <div className="grid grid-cols-1 gap-4">
                 {localSettings.benefits.map((benefit, idx) => (
                   <div key={benefit.id} className="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded-lg bg-purple-600/20 flex items-center justify-center text-purple-400 text-xs font-bold">
-                          {idx + 1}
-                        </div>
-                        <h4 className="font-bold text-white">포인트 {idx + 1}</h4>
-                      </div>
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-white">포인트 {idx + 1}</h4>
                       <select 
                         value={benefit.iconName}
                         onChange={e => updateBenefit(benefit.id, 'iconName', e.target.value as any)}
-                        className="bg-zinc-800 border border-zinc-700 rounded-md p-1 text-[10px] text-zinc-300 outline-none"
+                        className="bg-zinc-800 border border-zinc-700 rounded-md p-1 text-xs text-zinc-300 outline-none"
                       >
                         <option value="TrendingUp">성장</option>
                         <option value="Handshake">협력</option>
@@ -239,109 +204,32 @@ const FranchiseManagement = () => {
               className="w-full flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-2xl font-bold shadow-lg shadow-purple-600/20 transition-all transform hover:scale-[1.01]"
             >
               <Save size={20} />
-              <span>사이트 설정 저장 및 반영</span>
+              <span>창업 설정 저장</span>
             </button>
           </div>
 
-          {/* Pro Preview Column with Google AI Studio Styling */}
+          {/* Mini Preview */}
           <div className="xl:col-span-2 sticky top-12 space-y-6 hidden xl:block">
-            {/* Google AI Studio Inspired Header */}
-            <div className="relative group p-[2px] rounded-3xl overflow-hidden">
-               <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 animate-gradient-xy group-hover:duration-500"></div>
-               <div className="relative bg-zinc-950/95 backdrop-blur-xl p-6 rounded-[calc(1.5rem-1px)] border border-white/5">
-                 <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                       <div className="relative">
-                          <img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304603353591041.svg" className="w-8 h-8 animate-pulse" alt="Gemini" />
-                          <div className="absolute inset-0 bg-blue-500/20 blur-lg rounded-full animate-pulse"></div>
-                       </div>
-                       <div>
-                          <div className="text-white text-sm font-black tracking-tight leading-none mb-1 uppercase italic">Google AI Studio</div>
-                          <div className="text-[10px] text-zinc-500 font-bold tracking-widest uppercase">Adaptive Pro Preview</div>
-                       </div>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                       <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></div>
-                       <span className="text-[9px] font-black text-green-500 tracking-tighter uppercase">Active</span>
-                    </div>
+            <div className="p-6 bg-zinc-900 rounded-3xl border border-zinc-800">
+               <div className="flex items-center space-x-2 mb-4 text-zinc-400 uppercase text-[10px] font-bold tracking-[0.2em]">
+                 <Eye size={12} />
+                 <span>Franchise Page Preview</span>
+               </div>
+               <div className="bg-black rounded-2xl p-6 border border-zinc-800 min-h-[400px]">
+                 <div className="text-center mb-6">
+                    <Handshake size={32} className="mx-auto text-purple-500 mb-3" />
+                    <div className="h-4 w-3/4 bg-zinc-800 rounded mx-auto mb-2"></div>
+                    <p className="text-[10px] text-zinc-500 line-clamp-2">{localSettings.heroSubtitle}</p>
                  </div>
-                 <div className="flex items-center space-x-4">
-                    <div className="flex -space-x-1">
-                       <div className="w-5 h-5 rounded-full border-2 border-zinc-900 bg-blue-500"></div>
-                       <div className="w-5 h-5 rounded-full border-2 border-zinc-900 bg-purple-500"></div>
-                       <div className="w-5 h-5 rounded-full border-2 border-zinc-900 bg-pink-500"></div>
-                    </div>
-                    <div className="text-[9px] text-zinc-500 font-medium">Gemini-Powered Visual Optimization</div>
+                 <div className="grid grid-cols-1 gap-3">
+                   {localSettings.benefits.map(b => (
+                     <div key={b.id} className="p-3 bg-zinc-900 rounded-xl border border-white/5">
+                        <div className="font-bold text-[10px] text-white mb-1">{b.title}</div>
+                        <div className="text-[8px] text-zinc-500 line-clamp-1">{b.description}</div>
+                     </div>
+                   ))}
                  </div>
                </div>
-            </div>
-            
-            <div className="relative mx-auto w-full max-w-[360px] h-[720px] bg-zinc-950 rounded-[3rem] border-[12px] border-zinc-900 shadow-[0_0_100px_rgba(139,92,246,0.2)] overflow-hidden flex flex-col group">
-              {/* Notch */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-zinc-900 rounded-b-[1.5rem] z-20 flex items-center justify-center">
-                 <div className="w-12 h-1 bg-zinc-800 rounded-full"></div>
-              </div>
-              
-              <div className="flex-grow overflow-y-auto custom-scrollbar bg-black relative">
-                {/* AI Aurora background effect */}
-                <div className="absolute top-0 left-0 w-full h-[400px] bg-gradient-to-b from-purple-600/10 via-blue-500/5 to-transparent pointer-events-none"></div>
-                <div className="absolute -top-20 -left-20 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full"></div>
-                
-                <div className="relative z-10 pt-16 px-6 pb-12">
-                  <div className="text-center mb-10">
-                    <div className="flex justify-center mb-6">
-                      <div className="p-4 bg-zinc-900/50 rounded-2xl border border-white/10 ring-8 ring-purple-600/5 group-hover:ring-purple-600/10 transition-all">
-                        <SmartphoneIcon size={28} className="text-purple-400 group-hover:scale-110 transition-transform" />
-                      </div>
-                    </div>
-                    <h1 className="text-xl font-black text-white mb-4 tracking-tighter whitespace-pre-wrap leading-tight">
-                      {localSettings.heroTitle}
-                    </h1>
-                    <p className="text-[10px] text-zinc-500 leading-relaxed max-w-[220px] mx-auto whitespace-pre-wrap">
-                      {localSettings.heroSubtitle}
-                    </p>
-                  </div>
-
-                  <div className="space-y-4 mb-8">
-                    {localSettings.benefits.map((item) => {
-                      const Icon = IconMap[item.iconName] || TrendingUp;
-                      return (
-                        <div key={item.id} className="p-5 rounded-2xl bg-zinc-900/40 border border-white/5 backdrop-blur-sm shadow-2xl transform transition-transform hover:translate-x-1">
-                          <div className="w-8 h-8 rounded-lg bg-purple-600/10 flex items-center justify-center mb-3">
-                            <Icon size={16} className="text-purple-400" />
-                          </div>
-                          <h3 className="text-xs font-bold text-white mb-1">{item.title}</h3>
-                          <p className="text-zinc-500 text-[9px] leading-relaxed">{item.description}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Form Preview with highlighted email action */}
-                  <div className="p-6 rounded-3xl bg-zinc-900/80 border border-white/10 text-center relative overflow-hidden group/form">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 group-hover/form:h-2 transition-all"></div>
-                    <div className="text-white text-[11px] font-black mb-4 flex items-center justify-center uppercase tracking-widest">
-                      <Mail size={12} className="mr-2 text-purple-400" /> Consultation Form
-                    </div>
-                    <div className="space-y-2 opacity-30 mb-5">
-                      <div className="w-full h-8 bg-zinc-800 rounded-lg"></div>
-                      <div className="w-full h-8 bg-zinc-800 rounded-lg"></div>
-                    </div>
-                    <div className="w-full h-12 bg-purple-600 rounded-2xl flex flex-col items-center justify-center text-white shadow-lg shadow-purple-600/20 group-hover/form:bg-purple-500 transition-colors">
-                      <div className="text-[10px] font-black">상담 신청하기</div>
-                      <div className="text-[7px] opacity-70 font-mono">Send to: rhehfrh@hanmail.net</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="h-8 bg-zinc-950 flex items-center justify-center pb-2">
-                <div className="w-28 h-1.5 bg-zinc-800 rounded-full"></div>
-              </div>
-            </div>
-            <div className="flex items-center justify-center space-x-2 text-zinc-600">
-               <Eye size={12} />
-               <p className="text-[9px] font-bold uppercase tracking-widest">Pixel-perfect rendering by Gemini-Pro Vision</p>
             </div>
           </div>
         </div>

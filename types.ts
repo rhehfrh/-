@@ -30,20 +30,7 @@ export interface SiteSettings {
   heroSubtitle: string;
 }
 
-export interface FranchiseBenefit {
-  id: string;
-  title: string;
-  description: string;
-  iconName: 'TrendingUp' | 'Handshake' | 'MapPin' | 'Award' | 'Users';
-}
-
-export interface FranchiseSettings {
-  heroTitle: string;
-  heroSubtitle: string;
-  contactEmail: string;
-  benefits: FranchiseBenefit[];
-}
-
+// Added FranchiseInquiry interface for franchise consultation requests
 export interface FranchiseInquiry {
   id: string;
   name: string;
@@ -53,15 +40,31 @@ export interface FranchiseInquiry {
   date: string;
 }
 
+// Added FranchiseBenefit interface for the benefit items on the franchise page
+export interface FranchiseBenefit {
+  id: string;
+  iconName: 'TrendingUp' | 'Handshake' | 'MapPin' | 'Award' | 'Users';
+  title: string;
+  description: string;
+}
+
+// Added FranchiseSettings interface for content specific to the franchise section
+export interface FranchiseSettings {
+  heroSubtitle: string;
+  benefits: FranchiseBenefit[];
+}
+
 export interface GlobalState {
   products: Product[];
   posts: Post[];
   settings: SiteSettings;
+  // Added franchise-related state properties to resolve missing property errors
   franchiseSettings: FranchiseSettings;
   inquiries: FranchiseInquiry[];
   updateProducts: (products: Product[]) => void;
   updatePosts: (posts: Post[]) => void;
   updateSettings: (settings: SiteSettings) => void;
+  // Added franchise-related update methods to resolve missing property errors
   updateFranchiseSettings: (settings: FranchiseSettings) => void;
   updateInquiries: (inquiries: FranchiseInquiry[]) => void;
 }

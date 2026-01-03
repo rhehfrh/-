@@ -9,7 +9,9 @@ import {
   Instagram, 
   MessageCircle,
 } from 'lucide-react';
-import { GlobalState, Product, Post, SiteSettings, FranchiseSettings, FranchiseInquiry } from './types';
+// Updated imports to include franchise types
+import { GlobalState, Product, Post, SiteSettings, FranchiseInquiry, FranchiseSettings } from './types';
+// Updated imports to include franchise constants
 import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS, INITIAL_FRANCHISE_SETTINGS } from './constants';
 
 // Pages
@@ -60,7 +62,7 @@ const Navbar = () => {
               <Link to="/" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">홈</Link>
               <Link to="/products" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">제품 갤러리</Link>
               <Link to="/news" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">매장 소식</Link>
-              <Link to="/franchise" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">창업문의</Link>
+              <Link to="/franchise" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">창업 안내</Link>
               <Link to="/admin" className="text-gray-500 hover:text-white px-3 py-2 transition-opacity opacity-50 hover:opacity-100">
                 <SettingsIcon size={18} />
               </Link>
@@ -78,7 +80,7 @@ const Navbar = () => {
           <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">홈</Link>
           <Link to="/products" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">제품 갤러리</Link>
           <Link to="/news" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">매장 소식</Link>
-          <Link to="/franchise" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">창업문의</Link>
+          <Link to="/franchise" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">창업 안내</Link>
           <Link to="/admin" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-500">관리자</Link>
         </div>
       )}
@@ -166,6 +168,8 @@ export default function App() {
       return INITIAL_SETTINGS;
     }
   });
+
+  // Added franchise settings state with local storage persistence
   const [franchiseSettings, setFranchiseSettings] = useState<FranchiseSettings>(() => {
     try {
       const saved = localStorage.getItem('franchiseSettings');
@@ -174,6 +178,8 @@ export default function App() {
       return INITIAL_FRANCHISE_SETTINGS;
     }
   });
+
+  // Added franchise inquiries state with local storage persistence
   const [inquiries, setInquiries] = useState<FranchiseInquiry[]>(() => {
     try {
       const saved = localStorage.getItem('inquiries');
@@ -195,6 +201,7 @@ export default function App() {
     localStorage.setItem('settings', JSON.stringify(settings));
   }, [settings]);
 
+  // Handle persistence for new franchise states
   useEffect(() => {
     localStorage.setItem('franchiseSettings', JSON.stringify(franchiseSettings));
   }, [franchiseSettings]);
@@ -213,7 +220,7 @@ export default function App() {
     updatePosts: setPosts,
     updateSettings: setSettings,
     updateFranchiseSettings: setFranchiseSettings,
-    updateInquiries: setInquiries
+    updateInquiries: setInquiries,
   };
 
   return (

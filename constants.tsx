@@ -46,28 +46,27 @@ export const INITIAL_SETTINGS: SiteSettings = {
   heroSubtitle: '프리미엄 모바일 라이프의 시작, 바를정 핸드폰'
 };
 
+// Added initial settings for franchise section
 export const INITIAL_FRANCHISE_SETTINGS: FranchiseSettings = {
-  heroTitle: '정직한 성장의 동반자, 함께하세요.',
-  heroSubtitle: '체계적인 시스템과 검증된 수익 모델로 안정적인 창업을 지원합니다. 허위 매물 없는 정직한 매장 운영의 가치를 실현합니다.',
-  contactEmail: 'rhehfrh@hanmail.net',
+  heroSubtitle: '바를정 핸드폰은 단순한 대리점을 넘어, 지역 No.1 모바일 리테일러로 성장할 파트너를 찾습니다. 체계적인 교육과 전폭적인 지원으로 무경험자도 성공할 수 있는 시스템을 제공합니다.',
   benefits: [
     {
-      id: 'b1',
-      title: '검증된 수익 구조',
-      description: '투명한 정산 시스템과 높은 인센티브 구조로 가맹점의 실질 수익을 극대화합니다.',
-      iconName: 'TrendingUp'
+      id: '1',
+      iconName: 'TrendingUp',
+      title: '압도적 수익 구조',
+      description: '업계 최고 수준의 마진율과 투명한 정산 시스템으로 가맹점의 실질적 수익을 최우선으로 합니다.'
     },
     {
-      id: 'b2',
-      title: '체계적인 교육 지원',
-      description: '상담 기법부터 전산 업무까지, 초보 창업자도 전문가가 될 수 있도록 1:1 맞춤 교육을 제공합니다.',
-      iconName: 'Handshake'
+      id: '2',
+      iconName: 'Handshake',
+      title: '본사 직접 지원',
+      description: '개업 준비부터 운영 노하우 전수까지, 본사 전담 매니저가 상주하며 밀착 케어 서비스를 제공합니다.'
     },
     {
-      id: 'b3',
-      title: '상권 분석 및 보호',
-      description: '데이터 기반 상권 분석으로 최적의 입지를 제안하며, 확실한 영업권 보호 정책을 고수합니다.',
-      iconName: 'MapPin'
+      id: '3',
+      iconName: 'MapPin',
+      title: '지역 상권 보호',
+      description: '반경 내 추가 출점을 엄격히 제한하여 가맹점의 영업권을 확실하게 보장하고 상권을 분석해 드립니다.'
     }
   ]
 };
