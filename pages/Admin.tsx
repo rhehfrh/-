@@ -29,7 +29,8 @@ import {
   Award,
   Users,
   Mail,
-  Eye
+  Eye,
+  Phone
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 import { Product, Post, SiteSettings, FranchiseSettings, FranchiseBenefit, FranchiseInquiry } from '../types';
@@ -47,14 +48,6 @@ const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: 
       <span className="font-medium">{label}</span>
     </Link>
   );
-};
-
-const IconMap = {
-  TrendingUp: TrendingUp,
-  Handshake: Handshake,
-  MapPin: MapPin,
-  Award: Award,
-  Users: Users
 };
 
 const fileToBase64 = (file: File): Promise<string> => {
@@ -153,7 +146,17 @@ const FranchiseManagement = () => {
         <div className="grid grid-cols-1 xl:grid-cols-5 gap-8 items-start">
           <div className="xl:col-span-3 space-y-8">
             <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-6">
-              <h3 className="text-xl font-bold text-purple-400">메인 섹션 설정</h3>
+              <h3 className="text-xl font-bold text-purple-400">메인 및 연락처 설정</h3>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">본사 상담 번호</label>
+                <input 
+                  type="text"
+                  value={localSettings.contactNumber}
+                  onChange={e => setLocalSettings({...localSettings, contactNumber: e.target.value})}
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500 text-sm"
+                  placeholder="예: 010-8144-1109"
+                />
+              </div>
               <div className="space-y-2">
                 <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">서브텍스트</label>
                 <textarea 
@@ -208,7 +211,6 @@ const FranchiseManagement = () => {
             </button>
           </div>
 
-          {/* Mini Preview */}
           <div className="xl:col-span-2 sticky top-12 space-y-6 hidden xl:block">
             <div className="p-6 bg-zinc-900 rounded-3xl border border-zinc-800">
                <div className="flex items-center space-x-2 mb-4 text-zinc-400 uppercase text-[10px] font-bold tracking-[0.2em]">
@@ -220,6 +222,10 @@ const FranchiseManagement = () => {
                     <Handshake size={32} className="mx-auto text-purple-500 mb-3" />
                     <div className="h-4 w-3/4 bg-zinc-800 rounded mx-auto mb-2"></div>
                     <p className="text-[10px] text-zinc-500 line-clamp-2">{localSettings.heroSubtitle}</p>
+                 </div>
+                 <div className="p-3 bg-purple-600/20 border border-purple-500/20 rounded-xl mb-4 text-center">
+                   <div className="text-[8px] text-purple-400 font-bold mb-1">상담 번호 연결</div>
+                   <div className="text-xs text-white font-black">{localSettings.contactNumber}</div>
                  </div>
                  <div className="grid grid-cols-1 gap-3">
                    {localSettings.benefits.map(b => (
@@ -621,29 +627,6 @@ export default function Admin() {
 
   return (
     <div className="flex min-h-screen bg-black text-white selection:bg-purple-500/30">
-      <style>{`
-        @keyframes gradient-xy {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        .animate-gradient-xy {
-          background-size: 240% 240%;
-          animation: gradient-xy 4s ease infinite;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #333;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #444;
-        }
-      `}</style>
       <aside className="w-72 border-r border-zinc-800 bg-zinc-950 p-6 flex flex-col fixed h-full z-20">
         <div className="mb-12">
           <div className="flex items-center space-x-3 text-purple-500 mb-2">

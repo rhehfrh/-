@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 
-// 아이콘 이름을 Lucide 컴포넌트로 매핑하는 객체
 const IconMap: Record<string, any> = {
   TrendingUp,
   Handshake,
@@ -25,7 +24,7 @@ const IconMap: Record<string, any> = {
 };
 
 const AdvantageItem = ({ iconName, title, desc }: { iconName: string, title: string, desc: string }) => {
-  const Icon = IconMap[iconName] || Zap; // 기본값은 Zap
+  const Icon = IconMap[iconName] || Zap;
   return (
     <div className="flex items-start space-x-6 p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-purple-500/30 transition-all">
       <div className="w-14 h-14 rounded-2xl bg-purple-600/10 flex items-center justify-center text-purple-400 shrink-0">
@@ -40,11 +39,10 @@ const AdvantageItem = ({ iconName, title, desc }: { iconName: string, title: str
 };
 
 export default function Franchise() {
-  const { settings, franchiseSettings } = useGlobalState();
+  const { franchiseSettings } = useGlobalState();
 
   return (
     <div className="bg-black min-h-screen text-white selection:bg-purple-500/30">
-      {/* Simple & Bold Hero */}
       <section className="relative pt-48 pb-24 px-4 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-purple-600/10 rounded-full blur-[150px] -z-10"></div>
         <div className="max-w-4xl mx-auto text-center">
@@ -62,7 +60,6 @@ export default function Franchise() {
         </div>
       </section>
 
-      {/* Dynamic Advantages Section */}
       <section className="max-w-5xl mx-auto px-4 pb-32">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {franchiseSettings.benefits.map((benefit) => (
@@ -73,7 +70,6 @@ export default function Franchise() {
               desc={benefit.description}
             />
           ))}
-          {/* 장점이 부족할 경우 표시할 기본 스마트폰 지원 항목 */}
           {franchiseSettings.benefits.length < 4 && (
              <AdvantageItem 
                 iconName="Smartphone" 
@@ -84,23 +80,22 @@ export default function Franchise() {
         </div>
       </section>
 
-      {/* Simple CTA */}
       <section className="max-w-4xl mx-auto px-4 pb-48">
         <div className="relative p-1 rounded-[3rem] overflow-hidden bg-gradient-to-br from-white/10 to-purple-500/20">
           <div className="bg-zinc-900/90 backdrop-blur-3xl rounded-[calc(3rem-4px)] p-12 text-center">
             <h3 className="text-3xl font-black mb-6">자세한 상담이 필요하신가요?</h3>
             <p className="text-zinc-500 mb-10 leading-relaxed">
               가맹 절차, 예상 매출, 상권 분석 등 궁금하신 모든 사항을<br />
-              전문 상담사가 직접 안내해 드립니다.
+              본사 전문 상담사가 직접 안내해 드립니다.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <a 
-                href={`tel:${settings.contactNumber}`}
+                href={`tel:${franchiseSettings.contactNumber}`}
                 className="w-full sm:w-auto flex items-center justify-center space-x-3 bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-2xl font-black text-lg transition-all transform hover:scale-105 shadow-xl shadow-purple-600/20"
               >
                 <Phone size={20} />
-                <span>대표번호 전화 상담</span>
+                <span>본사 창업 상담 연결</span>
               </a>
               <button className="w-full sm:w-auto flex items-center justify-center space-x-2 text-zinc-400 hover:text-white font-bold transition-colors">
                 <span>카카오톡 채널 문의</span>
@@ -122,7 +117,6 @@ export default function Franchise() {
         </div>
       </section>
 
-      {/* Minimal Footer CTA */}
       <footer className="py-20 border-t border-white/5 text-center">
         <p className="text-zinc-600 text-sm font-bold uppercase tracking-[0.3em]">
           Honesty is the Best Value

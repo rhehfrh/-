@@ -46,9 +46,9 @@ export const INITIAL_SETTINGS: SiteSettings = {
   heroSubtitle: '프리미엄 모바일 라이프의 시작, 바를정 핸드폰'
 };
 
-// Added initial settings for franchise section
 export const INITIAL_FRANCHISE_SETTINGS: FranchiseSettings = {
   heroSubtitle: '바를정 핸드폰은 단순한 대리점을 넘어, 지역 No.1 모바일 리테일러로 성장할 파트너를 찾습니다. 체계적인 교육과 전폭적인 지원으로 무경험자도 성공할 수 있는 시스템을 제공합니다.',
+  contactNumber: '010-8144-1109', // Updated to the requested head office number
   benefits: [
     {
       id: '1',
