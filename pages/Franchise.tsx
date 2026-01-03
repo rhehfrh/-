@@ -8,24 +8,39 @@ import {
   ChevronRight,
   Smartphone,
   CheckCircle2,
-  Phone
+  Phone,
+  Award,
+  Users
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 
-const AdvantageItem = ({ icon: Icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="flex items-start space-x-6 p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-purple-500/30 transition-all">
-    <div className="w-14 h-14 rounded-2xl bg-purple-600/10 flex items-center justify-center text-purple-400 shrink-0">
-      <Icon size={28} />
+// 아이콘 이름을 Lucide 컴포넌트로 매핑하는 객체
+const IconMap: Record<string, any> = {
+  TrendingUp,
+  Handshake,
+  MapPin,
+  Award,
+  Users,
+  Smartphone
+};
+
+const AdvantageItem = ({ iconName, title, desc }: { iconName: string, title: string, desc: string }) => {
+  const Icon = IconMap[iconName] || Zap; // 기본값은 Zap
+  return (
+    <div className="flex items-start space-x-6 p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-purple-500/30 transition-all">
+      <div className="w-14 h-14 rounded-2xl bg-purple-600/10 flex items-center justify-center text-purple-400 shrink-0">
+        <Icon size={28} />
+      </div>
+      <div>
+        <h4 className="text-xl font-bold text-white mb-2">{title}</h4>
+        <p className="text-zinc-500 leading-relaxed text-sm">{desc}</p>
+      </div>
     </div>
-    <div>
-      <h4 className="text-xl font-bold text-white mb-2">{title}</h4>
-      <p className="text-zinc-500 leading-relaxed text-sm">{desc}</p>
-    </div>
-  </div>
-);
+  );
+};
 
 export default function Franchise() {
-  const { settings } = useGlobalState();
+  const { settings, franchiseSettings } = useGlobalState();
 
   return (
     <div className="bg-black min-h-screen text-white selection:bg-purple-500/30">
@@ -42,35 +57,30 @@ export default function Franchise() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600">바를정</span>이 답입니다.
           </h1>
           <p className="text-xl text-zinc-400 font-light leading-relaxed max-w-2xl mx-auto">
-            복잡한 유통 구조를 걷어내고 정직한 수익을 제안합니다.<br />
-            당신의 열정이 확실한 비즈니스가 되도록 돕겠습니다.
+            {franchiseSettings.heroSubtitle}
           </p>
         </div>
       </section>
 
-      {/* Core Advantages */}
+      {/* Dynamic Advantages Section */}
       <section className="max-w-5xl mx-auto px-4 pb-32">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <AdvantageItem 
-            icon={TrendingUp} 
-            title="압도적인 수익 구조" 
-            desc="본사의 유통 마진을 최소화하여 가맹점이 더 많은 수익을 가져가는 합리적인 시스템을 보장합니다."
-          />
-          <AdvantageItem 
-            icon={Handshake} 
-            title="밀착 운영 지원" 
-            desc="매장 오픈부터 마케팅, 재고 관리까지 전담 매니저가 상주하듯 꼼꼼하게 서포트합니다."
-          />
-          <AdvantageItem 
-            icon={MapPin} 
-            title="확실한 상권 보호" 
-            desc="가맹점 간의 거리를 엄격히 제한하여 지역 내 독점적인 영업권을 확실하게 약속드립니다."
-          />
-          <AdvantageItem 
-            icon={Smartphone} 
-            title="안정적인 물량 공급" 
-            desc="최신 플래그십 기종부터 인기 모델까지, 시장 수요에 맞춰 끊김 없는 물량 수급을 지원합니다."
-          />
+          {franchiseSettings.benefits.map((benefit) => (
+            <AdvantageItem 
+              key={benefit.id}
+              iconName={benefit.iconName}
+              title={benefit.title}
+              desc={benefit.description}
+            />
+          ))}
+          {/* 장점이 부족할 경우 표시할 기본 스마트폰 지원 항목 */}
+          {franchiseSettings.benefits.length < 4 && (
+             <AdvantageItem 
+                iconName="Smartphone" 
+                title="안정적인 물량 공급" 
+                desc="최신 플래그십 기종부터 인기 모델까지, 시장 수요에 맞춰 끊김 없는 물량 수급을 지원합니다."
+              />
+          )}
         </div>
       </section>
 
