@@ -12,11 +12,12 @@ import {
   ArrowLeft,
   Save,
   Wand2,
-  CheckCircle2
+  CheckCircle2,
+  Image as ImageIcon
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 import { Product, Post, SiteSettings } from '../types';
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
 const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: string }) => {
   const location = useLocation();
@@ -85,7 +86,7 @@ const ProductManagement = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold">제품 관리</h2>
         <button 
-          onClick={() => setEditingProduct({ name: '', brand: '', price: '', category: 'iPhone', imageUrl: 'https://picsum.photos/800/800' })}
+          onClick={() => setEditingProduct({ name: '', brand: '', price: '', category: 'iPhone', imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=800' })}
           className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold"
         >
           <Plus size={20} />
@@ -140,6 +141,21 @@ const ProductManagement = () => {
             </div>
           </div>
           <div className="space-y-2">
+            <label className="text-sm font-bold text-zinc-400">이미지 URL</label>
+            <div className="flex space-x-4">
+              <input 
+                type="text" 
+                value={editingProduct.imageUrl}
+                onChange={e => setEditingProduct({...editingProduct, imageUrl: e.target.value})}
+                className="flex-grow bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
+                placeholder="https://images.unsplash.com/..."
+              />
+              <div className="w-12 h-12 rounded-lg bg-zinc-800 overflow-hidden border border-zinc-700">
+                <img src={editingProduct.imageUrl} alt="preview" className="w-full h-full object-cover" />
+              </div>
+            </div>
+          </div>
+          <div className="space-y-2">
             <label className="text-sm font-bold text-zinc-400">상세 설명</label>
             <textarea 
               value={editingProduct.description}
@@ -159,7 +175,7 @@ const ProductManagement = () => {
           {products.map(product => (
             <div key={product.id} className="flex items-center justify-between p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all">
               <div className="flex items-center space-x-6">
-                <img src={product.imageUrl} className="w-16 h-16 rounded-xl object-cover" />
+                <img src={product.imageUrl} className="w-16 h-16 rounded-xl object-cover bg-zinc-800" />
                 <div>
                   <h4 className="font-bold text-lg">{product.name}</h4>
                   <p className="text-zinc-500 text-sm">{product.category} | {product.price}</p>
@@ -215,7 +231,7 @@ const PostManagement = () => {
         id: Math.random().toString(36).substr(2, 9),
         date: new Date().toISOString().split('T')[0],
         author: '관리자',
-        imageUrl: editingPost.imageUrl || 'https://picsum.photos/1200/600'
+        imageUrl: editingPost.imageUrl || 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200'
       } as Post;
       updatePosts([newPost, ...posts]);
     }
@@ -227,7 +243,7 @@ const PostManagement = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold">소식/이벤트 관리</h2>
         <button 
-          onClick={() => setEditingPost({ title: '', excerpt: '', content: '' })}
+          onClick={() => setEditingPost({ title: '', excerpt: '', content: '', imageUrl: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200' })}
           className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold"
         >
           <Plus size={20} />
@@ -237,15 +253,32 @@ const PostManagement = () => {
 
       {editingPost ? (
         <div className="p-8 rounded-2xl bg-zinc-900 border border-purple-600/30 space-y-6">
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-zinc-400">제목</label>
-            <input 
-              type="text" 
-              value={editingPost.title}
-              onChange={e => setEditingPost({...editingPost, title: e.target.value})}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
-              placeholder="예: 아이폰 15 할인 프로모션"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-zinc-400">제목</label>
+              <input 
+                type="text" 
+                value={editingPost.title}
+                onChange={e => setEditingPost({...editingPost, title: e.target.value})}
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
+                placeholder="예: 아이폰 15 할인 프로모션"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-zinc-400">이미지 URL</label>
+              <div className="flex space-x-4">
+                <input 
+                  type="text" 
+                  value={editingPost.imageUrl}
+                  onChange={e => setEditingPost({...editingPost, imageUrl: e.target.value})}
+                  className="flex-grow bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
+                  placeholder="https://images.unsplash.com/..."
+                />
+                <div className="w-12 h-12 rounded-lg bg-zinc-800 overflow-hidden border border-zinc-700 flex-shrink-0">
+                  <img src={editingPost.imageUrl} alt="preview" className="w-full h-full object-cover" />
+                </div>
+              </div>
+            </div>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-bold text-zinc-400">간략 요약</label>
@@ -287,7 +320,7 @@ const PostManagement = () => {
           {posts.map(post => (
             <div key={post.id} className="flex items-center justify-between p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all">
               <div className="flex items-center space-x-6">
-                <img src={post.imageUrl} className="w-16 h-16 rounded-xl object-cover" />
+                <img src={post.imageUrl} className="w-16 h-16 rounded-xl object-cover bg-zinc-800" />
                 <div>
                   <h4 className="font-bold text-lg">{post.title}</h4>
                   <p className="text-zinc-500 text-sm">{post.date} | {post.author}</p>
