@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -14,10 +14,10 @@ import {
   Wand2,
   CheckCircle2,
   Image as ImageIcon,
-  Camera
+  Upload
 } from 'lucide-react';
 import { useGlobalState } from '../App';
-import { Product, Post, SiteSettings, GalleryImage } from '../types';
+import { Product, Post, SiteSettings } from '../types';
 import { GoogleGenAI } from "@google/genai";
 
 const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: string }) => {
@@ -34,12 +34,21 @@ const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: 
   );
 };
 
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
+
 const DashboardHome = () => {
-  const { products, posts, gallery } = useGlobalState();
+  const { products, posts } = useGlobalState();
   return (
     <div className="space-y-8">
       <h2 className="text-3xl font-bold">대시보드 개요</h2>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800">
           <div className="text-zinc-500 text-sm font-bold uppercase mb-2">등록된 기종</div>
           <div className="text-5xl font-black text-purple-500">{products.length}</div>
@@ -47,10 +56,6 @@ const DashboardHome = () => {
         <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800">
           <div className="text-zinc-500 text-sm font-bold uppercase mb-2">등록된 포스트</div>
           <div className="text-5xl font-black text-purple-500">{posts.length}</div>
-        </div>
-        <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800">
-          <div className="text-zinc-500 text-sm font-bold uppercase mb-2">매장 사진</div>
-          <div className="text-5xl font-black text-purple-500">{gallery.length}</div>
         </div>
         <div className="p-8 rounded-2xl bg-purple-600/10 border border-purple-600/30">
           <div className="text-purple-400 text-sm font-bold uppercase mb-2">방문자 현황</div>
@@ -61,81 +66,10 @@ const DashboardHome = () => {
   );
 };
 
-const GalleryManagement = () => {
-  const { gallery, updateGallery } = useGlobalState();
-  const [newUrl, setNewUrl] = useState('');
-
-  const handleAdd = () => {
-    if (!newUrl) return;
-    const newImage: GalleryImage = {
-      id: Math.random().toString(36).substr(2, 9),
-      url: newUrl
-    };
-    updateGallery([...gallery, newImage]);
-    setNewUrl('');
-  };
-
-  const handleDelete = (id: string) => {
-    if (confirm('이 사진을 갤러리에서 삭제하시겠습니까?')) {
-      updateGallery(gallery.filter(img => img.id !== id));
-    }
-  };
-
-  return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold">매장 갤러리 관리</h2>
-      </div>
-
-      <div className="p-8 rounded-2xl bg-zinc-900 border border-purple-600/30 space-y-4">
-        <label className="text-sm font-bold text-zinc-400">새 사진 추가 (이미지 URL)</label>
-        <div className="flex space-x-4">
-          <input 
-            type="text" 
-            value={newUrl}
-            onChange={e => setNewUrl(e.target.value)}
-            className="flex-grow bg-zinc-800 border border-zinc-700 rounded-xl p-4 focus:outline-none focus:border-purple-500"
-            placeholder="https://images.unsplash.com/..."
-          />
-          <button 
-            onClick={handleAdd}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-bold flex items-center space-x-2 transition-colors"
-          >
-            <Plus size={20} />
-            <span>사진 추가</span>
-          </button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {gallery.map(img => (
-          <div key={img.id} className="group relative aspect-square rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-purple-600/50 transition-all">
-            <img src={img.url} className="w-full h-full object-cover" alt="Gallery item" />
-            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <button 
-                onClick={() => handleDelete(img.id)}
-                className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-full transition-transform transform hover:scale-110"
-              >
-                <Trash2 size={24} />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {gallery.length === 0 && (
-        <div className="text-center py-20 bg-zinc-900/50 rounded-3xl border border-zinc-800">
-          <ImageIcon size={48} className="mx-auto text-zinc-700 mb-4" />
-          <p className="text-zinc-500">등록된 매장 사진이 없습니다. 첫 사진을 등록해보세요!</p>
-        </div>
-      )}
-    </div>
-  );
-};
-
 const ProductManagement = () => {
   const { products, updateProducts } = useGlobalState();
   const [editingProduct, setEditingProduct] = useState<Partial<Product> | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = (id: string) => {
     if (confirm('정말 삭제하시겠습니까?')) {
@@ -156,6 +90,13 @@ const ProductManagement = () => {
       updateProducts([newProduct, ...products]);
     }
     setEditingProduct(null);
+  };
+
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const base64 = await fileToBase64(e.target.files[0]);
+      setEditingProduct(prev => prev ? { ...prev, imageUrl: base64 } : null);
+    }
   };
 
   return (
@@ -192,43 +133,33 @@ const ProductManagement = () => {
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-zinc-400">카테고리</label>
-              <select 
-                value={editingProduct.category}
-                onChange={e => setEditingProduct({...editingProduct, category: e.target.value as any})}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
-              >
-                <option value="iPhone">iPhone</option>
-                <option value="Galaxy">Galaxy</option>
-                <option value="Others">Others</option>
-              </select>
-            </div>
-            <div className="space-y-2">
-               <label className="text-sm font-bold text-zinc-400">메인 노출 여부</label>
-               <div className="flex items-center space-x-2 p-3">
-                 <input 
-                   type="checkbox" 
-                   checked={editingProduct.isFeatured} 
-                   onChange={e => setEditingProduct({...editingProduct, isFeatured: e.target.checked})}
-                   className="w-5 h-5 accent-purple-600"
-                 />
-                 <span>추천 제품으로 설정</span>
-               </div>
-            </div>
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-bold text-zinc-400">이미지 URL</label>
-            <div className="flex space-x-4">
-              <input 
-                type="text" 
-                value={editingProduct.imageUrl}
-                onChange={e => setEditingProduct({...editingProduct, imageUrl: e.target.value})}
-                className="flex-grow bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
-                placeholder="https://images.unsplash.com/..."
-              />
-              <div className="w-12 h-12 rounded-lg bg-zinc-800 overflow-hidden border border-zinc-700">
-                <img src={editingProduct.imageUrl} alt="preview" className="w-full h-full object-cover" />
+            <label className="text-sm font-bold text-zinc-400 block mb-2">제품 이미지</label>
+            <div className="flex items-center space-x-6">
+              <div className="w-32 h-32 rounded-2xl bg-zinc-800 border border-zinc-700 overflow-hidden flex items-center justify-center">
+                {editingProduct.imageUrl ? (
+                  <img src={editingProduct.imageUrl} alt="preview" className="w-full h-full object-cover" />
+                ) : (
+                  <ImageIcon size={32} className="text-zinc-600" />
+                )}
+              </div>
+              <div className="space-y-3">
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={onFileChange} 
+                  accept="image/*" 
+                  className="hidden" 
+                />
+                <button 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center space-x-2 bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-sm font-bold transition-colors"
+                >
+                  <Upload size={16} />
+                  <span>이미지 업로드</span>
+                </button>
+                <p className="text-xs text-zinc-500">이미지 파일을 선택하여 직접 업로드하세요.</p>
               </div>
             </div>
           </div>
@@ -255,7 +186,7 @@ const ProductManagement = () => {
                 <img src={product.imageUrl} className="w-16 h-16 rounded-xl object-cover bg-zinc-800" />
                 <div>
                   <h4 className="font-bold text-lg">{product.name}</h4>
-                  <p className="text-zinc-500 text-sm">{product.category} | {product.price}</p>
+                  <p className="text-zinc-500 text-sm">{product.price}</p>
                 </div>
               </div>
               <div className="flex space-x-2">
@@ -278,6 +209,7 @@ const PostManagement = () => {
   const { posts, updatePosts } = useGlobalState();
   const [editingPost, setEditingPost] = useState<Partial<Post> | null>(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAiGenerate = async () => {
     if (!editingPost?.title) return alert('제목을 먼저 입력해주세요.');
@@ -315,6 +247,13 @@ const PostManagement = () => {
     setEditingPost(null);
   };
 
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const base64 = await fileToBase64(e.target.files[0]);
+      setEditingPost(prev => prev ? { ...prev, imageUrl: base64 } : null);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -330,30 +269,42 @@ const PostManagement = () => {
 
       {editingPost ? (
         <div className="p-8 rounded-2xl bg-zinc-900 border border-purple-600/30 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-zinc-400">제목</label>
-              <input 
-                type="text" 
-                value={editingPost.title}
-                onChange={e => setEditingPost({...editingPost, title: e.target.value})}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
-                placeholder="예: 아이폰 15 할인 프로모션"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-zinc-400">이미지 URL</label>
-              <div className="flex space-x-4">
-                <input 
-                  type="text" 
-                  value={editingPost.imageUrl}
-                  onChange={e => setEditingPost({...editingPost, imageUrl: e.target.value})}
-                  className="flex-grow bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
-                  placeholder="https://images.unsplash.com/..."
-                />
-                <div className="w-12 h-12 rounded-lg bg-zinc-800 overflow-hidden border border-zinc-700 flex-shrink-0">
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-zinc-400">제목</label>
+            <input 
+              type="text" 
+              value={editingPost.title}
+              onChange={e => setEditingPost({...editingPost, title: e.target.value})}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
+              placeholder="예: 아이폰 15 할인 프로모션"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-zinc-400 block mb-2">소식 대표 사진</label>
+            <div className="flex items-center space-x-6">
+              <div className="w-48 h-32 rounded-2xl bg-zinc-800 border border-zinc-700 overflow-hidden flex items-center justify-center">
+                {editingPost.imageUrl ? (
                   <img src={editingPost.imageUrl} alt="preview" className="w-full h-full object-cover" />
-                </div>
+                ) : (
+                  <ImageIcon size={32} className="text-zinc-600" />
+                )}
+              </div>
+              <div className="space-y-3">
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={onFileChange} 
+                  accept="image/*" 
+                  className="hidden" 
+                />
+                <button 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center space-x-2 bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-sm font-bold transition-colors"
+                >
+                  <Upload size={16} />
+                  <span>이미지 업로드</span>
+                </button>
+                <p className="text-xs text-zinc-500">배너로 사용할 사진을 선택하세요.</p>
               </div>
             </div>
           </div>
@@ -400,7 +351,7 @@ const PostManagement = () => {
                 <img src={post.imageUrl} className="w-16 h-16 rounded-xl object-cover bg-zinc-800" />
                 <div>
                   <h4 className="font-bold text-lg">{post.title}</h4>
-                  <p className="text-zinc-500 text-sm">{post.date} | {post.author}</p>
+                  <p className="text-zinc-500 text-sm">{post.date}</p>
                 </div>
               </div>
               <div className="flex space-x-2">
@@ -467,15 +418,6 @@ const SettingsManagement = () => {
               className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-zinc-500 uppercase">주소</label>
-            <input 
-              type="text" 
-              value={localSettings.address}
-              onChange={e => setLocalSettings({...localSettings, address: e.target.value})}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
-            />
-          </div>
         </div>
 
         <div className="space-y-4">
@@ -498,15 +440,6 @@ const SettingsManagement = () => {
               className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-zinc-500 uppercase">메인 헤드라인</label>
-            <input 
-              type="text" 
-              value={localSettings.heroTitle}
-              onChange={e => setLocalSettings({...localSettings, heroTitle: e.target.value})}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500"
-            />
-          </div>
         </div>
       </div>
 
@@ -525,7 +458,6 @@ export default function Admin() {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      {/* Sidebar */}
       <aside className="w-72 border-r border-zinc-800 bg-zinc-950 p-6 flex flex-col fixed h-full z-20">
         <div className="mb-12">
           <div className="text-2xl font-black text-purple-500 mb-2">관리자 센터</div>
@@ -536,7 +468,6 @@ export default function Admin() {
           <SidebarLink to="" icon={LayoutDashboard} label="홈" />
           <SidebarLink to="/products" icon={Package} label="제품 관리" />
           <SidebarLink to="/posts" icon={Newspaper} label="소식 관리" />
-          <SidebarLink to="/gallery" icon={Camera} label="갤러리 관리" />
           <SidebarLink to="/settings" icon={SettingsIcon} label="사이트 설정" />
         </nav>
 
@@ -551,13 +482,11 @@ export default function Admin() {
         </div>
       </aside>
 
-      {/* Content */}
       <main className="flex-grow ml-72 p-12">
         <Routes>
           <Route path="/" element={<DashboardHome />} />
           <Route path="/products" element={<ProductManagement />} />
           <Route path="/posts" element={<PostManagement />} />
-          <Route path="/gallery" element={<GalleryManagement />} />
           <Route path="/settings" element={<SettingsManagement />} />
         </Routes>
       </main>

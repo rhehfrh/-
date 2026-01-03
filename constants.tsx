@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { Product, Post, SiteSettings, GalleryImage } from './types';
+import { Product, Post, SiteSettings } from './types';
 
 export const INITIAL_PRODUCTS: Product[] = [
   {
@@ -22,16 +21,6 @@ export const INITIAL_PRODUCTS: Product[] = [
     imageUrl: 'https://images.unsplash.com/photo-1707148560341-2a106869009a?auto=format&fit=crop&q=80&w=800',
     isFeatured: true,
     category: 'Galaxy'
-  },
-  {
-    id: '3',
-    name: 'Galaxy Z Fold5',
-    brand: 'Samsung',
-    price: '2,090,000원~',
-    description: '대화면의 몰입감, 압도적인 멀티태스킹.',
-    imageUrl: 'https://images.unsplash.com/photo-1683401764214-36592471946c?auto=format&fit=crop&q=80&w=800',
-    isFeatured: false,
-    category: 'Galaxy'
   }
 ];
 
@@ -44,23 +33,7 @@ export const INITIAL_POSTS: Post[] = [
     date: '2024-05-20',
     author: '관리자',
     imageUrl: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=1200'
-  },
-  {
-    id: '2',
-    title: '아이폰 16 사전예약 알림 서비스',
-    excerpt: '가장 먼저 최신 기종을 만나보세요.',
-    content: '곧 출시될 최신 기종 사전예약 리스트를 작성 중입니다. 상담 신청 시 우선 순위를 부여해드립니다.',
-    date: '2024-05-25',
-    author: '상담 실장',
-    imageUrl: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=1200'
   }
-];
-
-export const INITIAL_GALLERY: GalleryImage[] = [
-  { id: 'g1', url: 'https://images.unsplash.com/photo-1556740734-7f96267b118a?auto=format&fit=crop&q=80&w=800' },
-  { id: 'g2', url: 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800' },
-  { id: 'g3', url: 'https://images.unsplash.com/photo-1580913209323-646944b204e3?auto=format&fit=crop&q=80&w=800' },
-  { id: 'g4', url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800' }
 ];
 
 export const INITIAL_SETTINGS: SiteSettings = {

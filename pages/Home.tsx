@@ -9,7 +9,8 @@ import {
   ChevronRight,
   Zap,
   Star,
-  Camera
+  Handshake,
+  ArrowRight
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 
@@ -24,7 +25,7 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: str
 );
 
 export default function Home() {
-  const { products, settings, posts, gallery } = useGlobalState();
+  const { products, settings } = useGlobalState();
   const featuredProducts = products.filter(p => p.isFeatured).slice(0, 3);
 
   return (
@@ -99,35 +100,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Gallery Section - New */}
-      <section className="py-24 bg-zinc-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center space-x-2 text-purple-500 mb-4">
-              <Camera size={20} />
-              <span className="font-bold tracking-widest uppercase text-sm">Store Tour</span>
-            </div>
-            <h2 className="text-4xl font-bold text-white mb-4">매장 둘러보기</h2>
-            <p className="text-zinc-400">바를정 핸드폰은 언제나 고객님을 환영합니다. 쾌적한 상담 공간을 확인하세요.</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {gallery.map((img, i) => (
-              <div 
-                key={img.id} 
-                className={`group relative overflow-hidden rounded-3xl bg-zinc-900 ${i % 3 === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
-              >
-                <img 
-                  src={img.url} 
-                  alt="Store" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Value Prop */}
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -160,55 +132,68 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Reviews Section */}
-      <section className="py-24 bg-zinc-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-4xl font-black text-white mb-8 leading-tight">
-                이미 수많은 분들이<br />
-                <span className="text-purple-500">바를정</span>의 진심을 경험했습니다.
-              </h2>
-              <div className="space-y-6">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="flex space-x-4 p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-zinc-800 overflow-hidden">
-                        <img src={`https://picsum.photos/seed/user${i}/100/100`} alt="user" />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center space-x-1 mb-1 text-yellow-500">
-                        <Star size={14} fill="currentColor" />
-                        <Star size={14} fill="currentColor" />
-                        <Star size={14} fill="currentColor" />
-                        <Star size={14} fill="currentColor" />
-                        <Star size={14} fill="currentColor" />
-                      </div>
-                      <p className="text-zinc-300 text-sm mb-2 italic">
-                        "처음에는 반신반의했는데 상담 받고 바로 믿음이 갔어요. 강매 없이 제 상황에 딱 맞는 것만 추천해주시더라고요."
-                      </p>
-                      <span className="text-zinc-500 text-xs">- {i === 1 ? '김*준' : i === 2 ? '이*희' : '박*민'} 고객님</span>
-                    </div>
-                  </div>
-                ))}
+      {/* Franchise CTA Section */}
+      <section className="py-24 bg-zinc-950 relative overflow-hidden">
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="bg-gradient-to-br from-zinc-900 to-black p-12 md:p-20 rounded-[3rem] border border-white/5 shadow-3xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <div className="inline-flex items-center space-x-2 text-purple-400 mb-6 bg-purple-600/10 px-4 py-2 rounded-full border border-purple-500/20">
+                  <Handshake size={20} />
+                  <span className="text-sm font-bold uppercase tracking-widest">Success Partnership</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-8 leading-tight">
+                  <span className="text-purple-500">정직</span>으로 증명하는<br />성공의 가치
+                </h2>
+                <p className="text-zinc-400 text-lg mb-10 leading-relaxed">
+                  {settings.siteName}의 검증된 수익 모델과 전문 교육 시스템을 통해<br className="hidden md:block"/>
+                  모바일 비즈니스의 새로운 표준을 경험하세요.
+                </p>
+                <Link to="/franchise" className="inline-flex items-center space-x-3 px-10 py-5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 group shadow-lg shadow-purple-600/20">
+                  <span>창업 상세정보 확인하기</span>
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
               </div>
-            </div>
-            <div className="relative">
-              <div className="aspect-[4/5] rounded-[3rem] overflow-hidden border-4 border-purple-900/30">
-                <img src={gallery[0]?.url || "https://picsum.photos/seed/shop/800/1000"} alt="Store Front" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end p-12">
-                  <div className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 w-full">
-                    <h4 className="text-2xl font-bold text-white mb-2">방문 상담 예약</h4>
-                    <p className="text-zinc-300 text-sm mb-6">기다림 없이 최고의 서비스를 받아보세요.</p>
-                    <button className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl transition-colors">
-                      지금 바로 전화하기
-                    </button>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-8 rounded-3xl bg-zinc-800/50 border border-white/5 flex flex-col items-center text-center">
+                  <span className="text-4xl font-black text-purple-500 mb-2">98%</span>
+                  <span className="text-zinc-400 text-sm font-bold">가맹점 만족도</span>
+                </div>
+                <div className="p-8 rounded-3xl bg-zinc-800/50 border border-white/5 flex flex-col items-center text-center">
+                  <span className="text-4xl font-black text-purple-500 mb-2">1:1</span>
+                  <span className="text-zinc-400 text-sm font-bold">전담 매니징</span>
+                </div>
+                <div className="col-span-2 p-8 rounded-3xl bg-zinc-800/50 border border-white/5 flex items-center justify-between">
+                  <div className="text-left">
+                    <div className="text-xl font-bold text-white">전국 상권 분석 지원</div>
+                    <div className="text-zinc-500 text-sm">최적의 입지 선정을 위한 데이터 지원</div>
                   </div>
+                  <TrendingUp className="text-purple-500" size={40} />
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Trust Section */}
+      <section className="py-24 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl font-black text-white mb-8">
+                이미 수많은 분들이 <span className="text-purple-500">바를정</span>을 선택했습니다.
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map(i => (
+                    <div key={i} className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
+                        <div className="flex justify-center mb-4 text-yellow-500">
+                            {[...Array(5)].map((_, j) => <Star key={j} size={16} fill="currentColor" />)}
+                        </div>
+                        <p className="text-zinc-400 italic mb-4">"설명이 너무 친절하시고, 제게 꼭 필요한 요금제만 골라주셔서 정말 만족스럽습니다."</p>
+                        <span className="text-zinc-500 text-sm">- 만족 고객 후기</span>
+                    </div>
+                ))}
+            </div>
         </div>
       </section>
     </div>

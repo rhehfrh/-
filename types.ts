@@ -20,12 +20,6 @@ export interface Post {
   imageUrl: string;
 }
 
-export interface GalleryImage {
-  id: string;
-  url: string;
-  caption?: string;
-}
-
 export interface SiteSettings {
   siteName: string;
   contactNumber: string;
@@ -39,10 +33,8 @@ export interface SiteSettings {
 export interface GlobalState {
   products: Product[];
   posts: Post[];
-  gallery: GalleryImage[];
   settings: SiteSettings;
   updateProducts: (products: Product[]) => void;
   updatePosts: (posts: Post[]) => void;
-  updateGallery: (images: GalleryImage[]) => void;
   updateSettings: (settings: SiteSettings) => void;
 }

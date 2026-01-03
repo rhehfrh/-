@@ -9,8 +9,8 @@ import {
   Instagram, 
   MessageCircle,
 } from 'lucide-react';
-import { GlobalState, Product, Post, SiteSettings, GalleryImage } from './types';
-import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS, INITIAL_GALLERY } from './constants';
+import { GlobalState, Product, Post, SiteSettings } from './types';
+import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS } from './constants';
 
 // Pages
 import Home from './pages/Home';
@@ -18,6 +18,7 @@ import ProductGallery from './pages/ProductGallery';
 import News from './pages/News';
 import PostDetail from './pages/PostDetail';
 import Admin from './pages/Admin';
+import Franchise from './pages/Franchise';
 
 const StateContext = createContext<GlobalState | undefined>(undefined);
 
@@ -59,6 +60,7 @@ const Navbar = () => {
               <Link to="/" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">홈</Link>
               <Link to="/products" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">제품 갤러리</Link>
               <Link to="/news" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">매장 소식</Link>
+              <Link to="/franchise" className="hover:text-purple-400 transition-colors px-3 py-2 text-sm font-medium">창업문의</Link>
               <Link to="/admin" className="text-gray-500 hover:text-white px-3 py-2 transition-opacity opacity-50 hover:opacity-100">
                 <SettingsIcon size={18} />
               </Link>
@@ -76,6 +78,7 @@ const Navbar = () => {
           <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">홈</Link>
           <Link to="/products" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">제품 갤러리</Link>
           <Link to="/news" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">매장 소식</Link>
+          <Link to="/franchise" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-white hover:bg-purple-900/20">창업문의</Link>
           <Link to="/admin" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-500">관리자</Link>
         </div>
       )}
@@ -157,15 +160,6 @@ export default function App() {
       return INITIAL_POSTS;
     }
   });
-  const [gallery, setGallery] = useState<GalleryImage[]>(() => {
-    try {
-      const saved = localStorage.getItem('gallery');
-      return saved ? JSON.parse(saved) : INITIAL_GALLERY;
-    } catch (e) {
-      console.error("Failed to parse gallery from localStorage", e);
-      return INITIAL_GALLERY;
-    }
-  });
   const [settings, setSettings] = useState<SiteSettings>(() => {
     try {
       const saved = localStorage.getItem('settings');
@@ -185,21 +179,15 @@ export default function App() {
   }, [posts]);
 
   useEffect(() => {
-    localStorage.setItem('gallery', JSON.stringify(gallery));
-  }, [gallery]);
-
-  useEffect(() => {
     localStorage.setItem('settings', JSON.stringify(settings));
   }, [settings]);
 
   const value: GlobalState = {
     products,
     posts,
-    gallery,
     settings,
     updateProducts: setProducts,
     updatePosts: setPosts,
-    updateGallery: setGallery,
     updateSettings: setSettings
   };
 
@@ -215,6 +203,7 @@ export default function App() {
               <Route path="/products" element={<ProductGallery />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:id" element={<PostDetail />} />
+              <Route path="/franchise" element={<Franchise />} />
               <Route path="/admin/*" element={<Admin />} />
             </Routes>
           </main>
