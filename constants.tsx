@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Product, Post, SiteSettings } from './types';
+import { Product, Post, SiteSettings, GalleryImage } from './types';
 
 export const INITIAL_PRODUCTS: Product[] = [
   {
@@ -54,6 +54,13 @@ export const INITIAL_POSTS: Post[] = [
     author: '상담 실장',
     imageUrl: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=1200'
   }
+];
+
+export const INITIAL_GALLERY: GalleryImage[] = [
+  { id: 'g1', url: 'https://images.unsplash.com/photo-1556740734-7f96267b118a?auto=format&fit=crop&q=80&w=800' },
+  { id: 'g2', url: 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800' },
+  { id: 'g3', url: 'https://images.unsplash.com/photo-1580913209323-646944b204e3?auto=format&fit=crop&q=80&w=800' },
+  { id: 'g4', url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800' }
 ];
 
 export const INITIAL_SETTINGS: SiteSettings = {

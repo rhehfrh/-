@@ -13,10 +13,11 @@ import {
   Save,
   Wand2,
   CheckCircle2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Camera
 } from 'lucide-react';
 import { useGlobalState } from '../App';
-import { Product, Post, SiteSettings } from '../types';
+import { Product, Post, SiteSettings, GalleryImage } from '../types';
 import { GoogleGenAI } from "@google/genai";
 
 const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: string }) => {
@@ -34,11 +35,11 @@ const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: 
 };
 
 const DashboardHome = () => {
-  const { products, posts } = useGlobalState();
+  const { products, posts, gallery } = useGlobalState();
   return (
     <div className="space-y-8">
       <h2 className="text-3xl font-bold">대시보드 개요</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800">
           <div className="text-zinc-500 text-sm font-bold uppercase mb-2">등록된 기종</div>
           <div className="text-5xl font-black text-purple-500">{products.length}</div>
@@ -47,11 +48,87 @@ const DashboardHome = () => {
           <div className="text-zinc-500 text-sm font-bold uppercase mb-2">등록된 포스트</div>
           <div className="text-5xl font-black text-purple-500">{posts.length}</div>
         </div>
+        <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800">
+          <div className="text-zinc-500 text-sm font-bold uppercase mb-2">매장 사진</div>
+          <div className="text-5xl font-black text-purple-500">{gallery.length}</div>
+        </div>
         <div className="p-8 rounded-2xl bg-purple-600/10 border border-purple-600/30">
           <div className="text-purple-400 text-sm font-bold uppercase mb-2">방문자 현황</div>
           <div className="text-5xl font-black text-white">READY</div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const GalleryManagement = () => {
+  const { gallery, updateGallery } = useGlobalState();
+  const [newUrl, setNewUrl] = useState('');
+
+  const handleAdd = () => {
+    if (!newUrl) return;
+    const newImage: GalleryImage = {
+      id: Math.random().toString(36).substr(2, 9),
+      url: newUrl
+    };
+    updateGallery([...gallery, newImage]);
+    setNewUrl('');
+  };
+
+  const handleDelete = (id: string) => {
+    if (confirm('이 사진을 갤러리에서 삭제하시겠습니까?')) {
+      updateGallery(gallery.filter(img => img.id !== id));
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="text-3xl font-bold">매장 갤러리 관리</h2>
+      </div>
+
+      <div className="p-8 rounded-2xl bg-zinc-900 border border-purple-600/30 space-y-4">
+        <label className="text-sm font-bold text-zinc-400">새 사진 추가 (이미지 URL)</label>
+        <div className="flex space-x-4">
+          <input 
+            type="text" 
+            value={newUrl}
+            onChange={e => setNewUrl(e.target.value)}
+            className="flex-grow bg-zinc-800 border border-zinc-700 rounded-xl p-4 focus:outline-none focus:border-purple-500"
+            placeholder="https://images.unsplash.com/..."
+          />
+          <button 
+            onClick={handleAdd}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-bold flex items-center space-x-2 transition-colors"
+          >
+            <Plus size={20} />
+            <span>사진 추가</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {gallery.map(img => (
+          <div key={img.id} className="group relative aspect-square rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-purple-600/50 transition-all">
+            <img src={img.url} className="w-full h-full object-cover" alt="Gallery item" />
+            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <button 
+                onClick={() => handleDelete(img.id)}
+                className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-full transition-transform transform hover:scale-110"
+              >
+                <Trash2 size={24} />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {gallery.length === 0 && (
+        <div className="text-center py-20 bg-zinc-900/50 rounded-3xl border border-zinc-800">
+          <ImageIcon size={48} className="mx-auto text-zinc-700 mb-4" />
+          <p className="text-zinc-500">등록된 매장 사진이 없습니다. 첫 사진을 등록해보세요!</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -459,6 +536,7 @@ export default function Admin() {
           <SidebarLink to="" icon={LayoutDashboard} label="홈" />
           <SidebarLink to="/products" icon={Package} label="제품 관리" />
           <SidebarLink to="/posts" icon={Newspaper} label="소식 관리" />
+          <SidebarLink to="/gallery" icon={Camera} label="갤러리 관리" />
           <SidebarLink to="/settings" icon={SettingsIcon} label="사이트 설정" />
         </nav>
 
@@ -479,6 +557,7 @@ export default function Admin() {
           <Route path="/" element={<DashboardHome />} />
           <Route path="/products" element={<ProductManagement />} />
           <Route path="/posts" element={<PostManagement />} />
+          <Route path="/gallery" element={<GalleryManagement />} />
           <Route path="/settings" element={<SettingsManagement />} />
         </Routes>
       </main>

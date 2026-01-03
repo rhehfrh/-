@@ -9,8 +9,8 @@ import {
   Instagram, 
   MessageCircle,
 } from 'lucide-react';
-import { GlobalState, Product, Post, SiteSettings } from './types';
-import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS } from './constants';
+import { GlobalState, Product, Post, SiteSettings, GalleryImage } from './types';
+import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS, INITIAL_GALLERY } from './constants';
 
 // Pages
 import Home from './pages/Home';
@@ -157,6 +157,15 @@ export default function App() {
       return INITIAL_POSTS;
     }
   });
+  const [gallery, setGallery] = useState<GalleryImage[]>(() => {
+    try {
+      const saved = localStorage.getItem('gallery');
+      return saved ? JSON.parse(saved) : INITIAL_GALLERY;
+    } catch (e) {
+      console.error("Failed to parse gallery from localStorage", e);
+      return INITIAL_GALLERY;
+    }
+  });
   const [settings, setSettings] = useState<SiteSettings>(() => {
     try {
       const saved = localStorage.getItem('settings');
@@ -176,15 +185,21 @@ export default function App() {
   }, [posts]);
 
   useEffect(() => {
+    localStorage.setItem('gallery', JSON.stringify(gallery));
+  }, [gallery]);
+
+  useEffect(() => {
     localStorage.setItem('settings', JSON.stringify(settings));
   }, [settings]);
 
   const value: GlobalState = {
     products,
     posts,
+    gallery,
     settings,
     updateProducts: setProducts,
     updatePosts: setPosts,
+    updateGallery: setGallery,
     updateSettings: setSettings
   };
 

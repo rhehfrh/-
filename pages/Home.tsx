@@ -8,7 +8,8 @@ import {
   Award, 
   ChevronRight,
   Zap,
-  Star
+  Star,
+  Camera
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 
@@ -23,9 +24,8 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: str
 );
 
 export default function Home() {
-  const { products, settings, posts } = useGlobalState();
+  const { products, settings, posts, gallery } = useGlobalState();
   const featuredProducts = products.filter(p => p.isFeatured).slice(0, 3);
-  const latestPost = posts[0];
 
   return (
     <div className="relative overflow-hidden">
@@ -99,8 +99,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Value Prop */}
+      {/* Gallery Section - New */}
       <section className="py-24 bg-zinc-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 text-purple-500 mb-4">
+              <Camera size={20} />
+              <span className="font-bold tracking-widest uppercase text-sm">Store Tour</span>
+            </div>
+            <h2 className="text-4xl font-bold text-white mb-4">매장 둘러보기</h2>
+            <p className="text-zinc-400">바를정 핸드폰은 언제나 고객님을 환영합니다. 쾌적한 상담 공간을 확인하세요.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {gallery.map((img, i) => (
+              <div 
+                key={img.id} 
+                className={`group relative overflow-hidden rounded-3xl bg-zinc-900 ${i % 3 === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
+              >
+                <img 
+                  src={img.url} 
+                  alt="Store" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Value Prop */}
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">왜 바를정 인가요?</h2>
@@ -132,7 +161,7 @@ export default function Home() {
       </section>
 
       {/* Reviews Section */}
-      <section className="py-24 bg-black">
+      <section className="py-24 bg-zinc-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -167,7 +196,7 @@ export default function Home() {
             </div>
             <div className="relative">
               <div className="aspect-[4/5] rounded-[3rem] overflow-hidden border-4 border-purple-900/30">
-                <img src="https://picsum.photos/seed/shop/800/1000" alt="Store Front" className="w-full h-full object-cover" />
+                <img src={gallery[0]?.url || "https://picsum.photos/seed/shop/800/1000"} alt="Store Front" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end p-12">
                   <div className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 w-full">
                     <h4 className="text-2xl font-bold text-white mb-2">방문 상담 예약</h4>
