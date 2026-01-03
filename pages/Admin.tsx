@@ -19,7 +19,6 @@ import {
   MessageSquare,
   ChevronDown,
   ChevronUp,
-  Eye,
   TrendingUp,
   MapPin,
   Award,
@@ -28,7 +27,8 @@ import {
   Mail,
   Sparkles,
   Zap,
-  Cpu
+  Cpu,
+  Monitor
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 import { Product, Post, SiteSettings, FranchiseSettings, FranchiseBenefit, FranchiseInquiry } from '../types';
@@ -111,11 +111,10 @@ const FranchiseManagement = () => {
   const [localSettings, setLocalSettings] = useState<FranchiseSettings>(franchiseSettings);
   const [activeTab, setActiveTab] = useState<'content' | 'inquiries'>('content');
   const [expandedInquiry, setExpandedInquiry] = useState<string | null>(null);
-  const [showPreview, setShowPreview] = useState(true);
 
   const handleSaveSettings = () => {
     updateFranchiseSettings(localSettings);
-    alert('창업 페이지 설정이 저장되었습니다.');
+    alert('창업 페이지 설정이 사이트에 저장되었습니다.');
   };
 
   const handleDeleteInquiry = (id: string) => {
@@ -155,22 +154,22 @@ const FranchiseManagement = () => {
             <div className="p-8 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold text-purple-400">메인 섹션 및 이메일 설정</h3>
-                <div className="flex items-center space-x-2 text-xs text-zinc-500">
-                  <Sparkles size={14} className="text-yellow-500" />
-                  <span>Google AI Studio 브랜딩 적용됨</span>
+                <div className="flex items-center space-x-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                  <span>Live Editing Mode</span>
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-6">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">문의 수신용 이메일 주소</label>
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">문의 수신 이메일 (상담 신청 전송 대상)</label>
                   <div className="relative">
-                    <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+                    <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-500" />
                     <input 
                       type="email"
                       value={localSettings.contactEmail}
                       onChange={e => setLocalSettings({...localSettings, contactEmail: e.target.value})}
                       className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 pl-12 text-white focus:outline-none focus:border-purple-500 text-sm font-mono"
-                      placeholder="example@email.com"
+                      placeholder="rhehfrh@hanmail.net"
                     />
                   </div>
                 </div>
@@ -238,29 +237,42 @@ const FranchiseManagement = () => {
               className="w-full flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-2xl font-bold shadow-lg shadow-purple-600/20 transition-all transform hover:scale-[1.01]"
             >
               <Save size={20} />
-              <span>변경사항 저장하기</span>
+              <span>사이트 설정 저장 및 반영</span>
             </button>
           </div>
 
+          {/* Pro Preview Column */}
           <div className="xl:col-span-2 sticky top-12 space-y-6 hidden xl:block">
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-900/40 to-blue-900/40 border border-purple-500/20 backdrop-blur-md">
-              <div className="flex items-center space-x-2 text-white mb-1">
-                <Sparkles size={16} className="text-yellow-400" />
-                <span className="text-xs font-black tracking-widest uppercase">Google AI Studio Preview</span>
+            <div className="relative p-[2px] rounded-2xl overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient-xy">
+              <div className="p-5 rounded-2xl bg-zinc-950/90 backdrop-blur-xl">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2 text-white">
+                    <Sparkles size={18} className="text-blue-400 animate-pulse" />
+                    <span className="text-xs font-black tracking-tighter uppercase">Google AI Studio Pro Preview</span>
+                  </div>
+                  <div className="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/30 text-[9px] font-black text-purple-400">
+                    GEMINI POWERED
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3 text-zinc-500 text-[10px]">
+                  <Monitor size={12} />
+                  <span>Real-time adaptive visualization engine is active</span>
+                </div>
               </div>
-              <p className="text-[10px] text-zinc-400">Gemini-Powered Live Visualization Engine</p>
             </div>
             
-            <div className="relative mx-auto w-full max-w-[360px] h-[720px] bg-zinc-950 rounded-[3rem] border-[10px] border-zinc-900 shadow-[0_0_50px_rgba(139,92,246,0.3)] overflow-hidden flex flex-col group">
+            <div className="relative mx-auto w-full max-w-[360px] h-[720px] bg-zinc-950 rounded-[3rem] border-[10px] border-zinc-900 shadow-[0_0_80px_rgba(139,92,246,0.15)] overflow-hidden flex flex-col">
+              {/* Notch */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-zinc-900 rounded-b-2xl z-20"></div>
               
               <div className="flex-grow overflow-y-auto custom-scrollbar bg-black relative">
-                <div className="absolute top-0 left-0 w-full h-full bg-purple-gradient opacity-20 pointer-events-none"></div>
+                {/* Simulated AI Glow background */}
+                <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-purple-600/10 to-transparent pointer-events-none"></div>
                 
                 <div className="relative z-10 pt-16 px-6 pb-12">
                   <div className="text-center mb-10">
                     <div className="flex justify-center mb-4">
-                      <div className="p-2 bg-white/5 rounded-full border border-white/10">
+                      <div className="p-3 bg-white/5 rounded-full border border-white/10 ring-4 ring-purple-600/5">
                         <SmartphoneIcon size={24} className="text-purple-400" />
                       </div>
                     </div>
@@ -278,8 +290,10 @@ const FranchiseManagement = () => {
                     {localSettings.benefits.map((item) => {
                       const Icon = IconMap[item.iconName] || TrendingUp;
                       return (
-                        <div key={item.id} className="p-5 rounded-2xl bg-zinc-900/50 border border-white/5 shadow-xl">
-                          <Icon size={16} className="text-purple-400 mb-2" />
+                        <div key={item.id} className="p-5 rounded-2xl bg-zinc-900/60 border border-white/5 shadow-2xl">
+                          <div className="w-8 h-8 rounded-lg bg-purple-600/10 flex items-center justify-center mb-3">
+                            <Icon size={16} className="text-purple-400" />
+                          </div>
                           <h3 className="text-xs font-bold text-white mb-1">{item.title}</h3>
                           <p className="text-zinc-500 text-[9px] leading-relaxed">{item.description}</p>
                         </div>
@@ -287,16 +301,18 @@ const FranchiseManagement = () => {
                     })}
                   </div>
 
-                  <div className="p-6 rounded-2xl bg-zinc-900/80 border border-white/10 text-center">
+                  {/* Form Preview */}
+                  <div className="p-6 rounded-3xl bg-zinc-900/80 border border-white/10 text-center relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
                     <div className="text-white text-[11px] font-bold mb-3 flex items-center justify-center">
-                      <Mail size={12} className="mr-2 text-purple-400" /> 성공 상담 신청
+                      <Mail size={12} className="mr-2 text-purple-400" /> 성공 상담 신청 (Preview)
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 opacity-50">
                       <div className="w-full h-7 bg-zinc-800 rounded-md"></div>
                       <div className="w-full h-7 bg-zinc-800 rounded-md"></div>
-                      <div className="w-full h-8 bg-purple-600 rounded-md flex items-center justify-center text-white text-[9px] font-bold">
-                        이메일로 상담 신청하기
-                      </div>
+                    </div>
+                    <div className="mt-4 w-full h-10 bg-purple-600 rounded-xl flex items-center justify-center text-white text-[10px] font-black shadow-lg shadow-purple-600/20">
+                      상담 신청 (Email to {localSettings.contactEmail})
                     </div>
                   </div>
                 </div>
@@ -306,6 +322,7 @@ const FranchiseManagement = () => {
                 <div className="w-24 h-1 bg-zinc-800 rounded-full"></div>
               </div>
             </div>
+            <p className="text-center text-[10px] text-zinc-600 italic">"Google AI Studio optimizes this preview for device fidelity."</p>
           </div>
         </div>
       ) : (
@@ -334,7 +351,7 @@ const FranchiseManagement = () => {
                   </div>
                 </div>
                 {expandedInquiry === iq.id && (
-                  <div className="p-8 bg-zinc-950 border-t border-zinc-800">
+                  <div className="p-8 bg-zinc-950 border-t border-zinc-800 animate-in slide-in-from-top-2 duration-300">
                     <p className="text-zinc-300 whitespace-pre-wrap leading-relaxed">{iq.message || '상세 내용 없음'}</p>
                   </div>
                 )}
@@ -436,7 +453,7 @@ const PostManagement = () => {
         <h2 className="text-3xl font-bold">소식/이벤트 관리</h2>
         <button 
           onClick={() => setEditingPost({ title: '', excerpt: '', content: '', imageUrl: '' })}
-          className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold"
+          className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-purple-600/20"
         >
           <Plus size={20} />
           <span>소식 추가</span>
@@ -465,7 +482,7 @@ const PostManagement = () => {
                 className="flex items-center space-x-2 text-xs text-purple-400 hover:text-white bg-purple-600/10 px-3 py-1.5 rounded-lg transition-all border border-purple-500/20 disabled:opacity-50"
               >
                 <Sparkles size={14} />
-                <span>{isImageGenerating ? 'AI 이미지 그리는 중...' : 'Google AI로 이미지 생성'}</span>
+                <span>{isImageGenerating ? 'Gemini Drawing...' : 'AI 이미지 생성'}</span>
               </button>
             </div>
             <div className="flex items-center space-x-6">
@@ -476,7 +493,7 @@ const PostManagement = () => {
                   <ImageIcon size={32} className="text-zinc-600" />
                 )}
                 {isImageGenerating && (
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm">
                     <Zap className="text-purple-500 animate-pulse" size={32} />
                   </div>
                 )}
@@ -490,7 +507,7 @@ const PostManagement = () => {
                   <Upload size={16} />
                   <span>파일 직접 업로드</span>
                 </button>
-                <p className="text-xs text-zinc-600">AI 생성을 이용하면 제목에 어울리는<br />이미지를 구글 AI가 직접 그려줍니다.</p>
+                <p className="text-xs text-zinc-600">AI 생성을 이용하면 구글의 기술이<br />고퀄리티 이미지를 직접 만들어줍니다.</p>
               </div>
             </div>
           </div>
@@ -513,7 +530,7 @@ const PostManagement = () => {
             <button onClick={handleSave} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-bold flex items-center space-x-2">
               <Save size={18} /> <span>저장하기</span>
             </button>
-            <button onClick={() => setEditingPost(null)} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-8 py-3 rounded-xl font-bold">취소</button>
+            <button onClick={() => setEditingPost(null)} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-8 py-3 rounded-xl font-bold transition-colors">취소</button>
           </div>
         </div>
       ) : (
@@ -582,7 +599,7 @@ const ProductManagement = () => {
         <h2 className="text-3xl font-bold">제품 관리</h2>
         <button 
           onClick={() => setEditingProduct({ name: '', brand: '', price: '', category: 'iPhone', imageUrl: '' })}
-          className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold"
+          className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-purple-600/20"
         >
           <Plus size={20} />
           <span>제품 추가</span>
@@ -612,18 +629,20 @@ const ProductManagement = () => {
                 )}
               </div>
               <input type="file" ref={fileInputRef} onChange={onFileChange} accept="image/*" className="hidden" />
-              <button onClick={() => fileInputRef.current?.click()} className="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-sm font-bold">업로드</button>
+              <button onClick={() => fileInputRef.current?.click()} className="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl text-sm font-bold">이미지 업로드</button>
             </div>
           </div>
           <div className="flex space-x-4 pt-4">
-            <button onClick={handleSave} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-bold">저장</button>
+            <button onClick={handleSave} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-bold flex items-center space-x-2">
+              <Save size={18} /> <span>저장하기</span>
+            </button>
             <button onClick={() => setEditingProduct(null)} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-8 py-3 rounded-xl font-bold">취소</button>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {products.map(product => (
-            <div key={product.id} className="flex items-center justify-between p-6 rounded-2xl bg-zinc-900 border border-zinc-800 transition-all">
+            <div key={product.id} className="flex items-center justify-between p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all">
               <div className="flex items-center space-x-6">
                 <img src={product.imageUrl} className="w-16 h-16 rounded-xl object-cover bg-zinc-800" />
                 <h4 className="font-bold text-lg">{product.name}</h4>
@@ -666,17 +685,17 @@ const SettingsManagement = () => {
           <input type="text" value={localSettings.contactNumber} onChange={e => setLocalSettings({...localSettings, contactNumber: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500" />
         </div>
         <div className="space-y-4">
-          <label className="text-xs font-bold text-zinc-500 uppercase">인스타그램</label>
+          <label className="text-xs font-bold text-zinc-500 uppercase">인스타그램 ID</label>
           <input type="text" value={localSettings.instagram} onChange={e => setLocalSettings({...localSettings, instagram: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500" />
           <label className="text-xs font-bold text-zinc-500 uppercase">카카오톡 ID</label>
           <input type="text" value={localSettings.kakaoId} onChange={e => setLocalSettings({...localSettings, kakaoId: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:outline-none focus:border-purple-500" />
         </div>
       </div>
-      <button onClick={handleSave} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-bold">설정 저장</button>
+      <button onClick={handleSave} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-purple-600/20 transition-all">설정 저장</button>
       {showToast && (
         <div className="fixed bottom-10 right-10 flex items-center space-x-3 bg-green-500 text-white px-6 py-4 rounded-2xl shadow-2xl animate-bounce">
           <CheckCircle2 size={24} />
-          <span className="font-bold">저장되었습니다!</span>
+          <span className="font-bold">시스템 설정이 업데이트되었습니다.</span>
         </div>
       )}
     </div>
@@ -688,13 +707,23 @@ export default function Admin() {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
+      <style>{`
+        @keyframes gradient-xy {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-gradient-xy {
+          background-size: 200% 200%;
+          animation: gradient-xy 3s ease infinite;
+        }
+      `}</style>
       <aside className="w-72 border-r border-zinc-800 bg-zinc-950 p-6 flex flex-col fixed h-full z-20">
         <div className="mb-12">
-          <div className="flex items-center space-x-2 text-purple-500 mb-2">
-            <Sparkles size={24} />
-            <div className="text-2xl font-black">AI STUDIO</div>
+          <div className="flex items-center space-x-3 text-purple-500 mb-2">
+            <Sparkles size={28} className="animate-pulse" />
+            <div className="text-2xl font-black tracking-tighter">AI STUDIO</div>
           </div>
-          <p className="text-xs text-zinc-500">바를정 핸드폰 통합 관리 시스템</p>
+          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest px-1">Management Portal</p>
         </div>
         
         <nav className="flex-grow space-y-2">
@@ -708,14 +737,14 @@ export default function Admin() {
         <div className="pt-6 border-t border-zinc-900">
           <button onClick={() => navigate('/')} className="w-full flex items-center space-x-2 px-4 py-3 rounded-xl text-zinc-500 hover:text-white transition-colors">
             <ArrowLeft size={20} />
-            <span>메인으로 돌아가기</span>
+            <span>메인 웹사이트 이동</span>
           </button>
         </div>
       </aside>
 
       <main className="flex-grow ml-72 p-12 relative">
         <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
-          <img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304603353591041.svg" alt="Google AI" className="w-24" />
+          <img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304603353591041.svg" alt="Google AI" className="w-32 animate-pulse" />
         </div>
         <Routes>
           <Route path="/" element={<DashboardHome />} />
