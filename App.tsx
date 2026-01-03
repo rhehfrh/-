@@ -2,20 +2,12 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { HashRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
-  Smartphone, 
   Menu, 
   X, 
   Settings as SettingsIcon, 
-  LayoutDashboard, 
-  Package, 
-  Newspaper, 
   Phone, 
   Instagram, 
   MessageCircle,
-  ChevronRight,
-  TrendingUp,
-  ShieldCheck,
-  Award
 } from 'lucide-react';
 import { GlobalState, Product, Post, SiteSettings } from './types';
 import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS } from './constants';
@@ -126,7 +118,7 @@ const Footer = () => {
             <h4 className="text-white font-semibold mb-6">위치 안내</h4>
             <p className="text-zinc-400 text-sm">{settings.address}</p>
             <div className="mt-6 flex space-x-4">
-               <a href={`https://instagram.com/${settings.instagram}`} className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-purple-600 transition-colors">
+               <a href={`https://instagram.com/${settings.instagram}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-purple-600 transition-colors">
                  <Instagram size={20} />
                </a>
                <button className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-yellow-500 transition-colors">
@@ -147,16 +139,31 @@ const Footer = () => {
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('products');
-    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    try {
+      const saved = localStorage.getItem('products');
+      return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    } catch (e) {
+      console.error("Failed to parse products from localStorage", e);
+      return INITIAL_PRODUCTS;
+    }
   });
   const [posts, setPosts] = useState<Post[]>(() => {
-    const saved = localStorage.getItem('posts');
-    return saved ? JSON.parse(saved) : INITIAL_POSTS;
+    try {
+      const saved = localStorage.getItem('posts');
+      return saved ? JSON.parse(saved) : INITIAL_POSTS;
+    } catch (e) {
+      console.error("Failed to parse posts from localStorage", e);
+      return INITIAL_POSTS;
+    }
   });
   const [settings, setSettings] = useState<SiteSettings>(() => {
-    const saved = localStorage.getItem('settings');
-    return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
+    try {
+      const saved = localStorage.getItem('settings');
+      return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
+    } catch (e) {
+      console.error("Failed to parse settings from localStorage", e);
+      return INITIAL_SETTINGS;
+    }
   });
 
   useEffect(() => {
