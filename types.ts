@@ -30,11 +30,38 @@ export interface SiteSettings {
   heroSubtitle: string;
 }
 
+export interface FranchiseBenefit {
+  id: string;
+  title: string;
+  description: string;
+  iconName: 'TrendingUp' | 'Handshake' | 'MapPin' | 'Award' | 'Users';
+}
+
+export interface FranchiseSettings {
+  heroTitle: string;
+  heroSubtitle: string;
+  contactEmail: string;
+  benefits: FranchiseBenefit[];
+}
+
+export interface FranchiseInquiry {
+  id: string;
+  name: string;
+  phone: string;
+  region: string;
+  message: string;
+  date: string;
+}
+
 export interface GlobalState {
   products: Product[];
   posts: Post[];
   settings: SiteSettings;
+  franchiseSettings: FranchiseSettings;
+  inquiries: FranchiseInquiry[];
   updateProducts: (products: Product[]) => void;
   updatePosts: (posts: Post[]) => void;
   updateSettings: (settings: SiteSettings) => void;
+  updateFranchiseSettings: (settings: FranchiseSettings) => void;
+  updateInquiries: (inquiries: FranchiseInquiry[]) => void;
 }

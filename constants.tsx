@@ -1,5 +1,5 @@
 
-import { Product, Post, SiteSettings } from './types';
+import { Product, Post, SiteSettings, FranchiseSettings } from './types';
 
 export const INITIAL_PRODUCTS: Product[] = [
   {
@@ -44,4 +44,30 @@ export const INITIAL_SETTINGS: SiteSettings = {
   kakaoId: 'bareuljeong',
   heroTitle: '정직함이 곧 가치입니다',
   heroSubtitle: '프리미엄 모바일 라이프의 시작, 바를정 핸드폰'
+};
+
+export const INITIAL_FRANCHISE_SETTINGS: FranchiseSettings = {
+  heroTitle: '정직한 성장의 동반자, 함께하세요.',
+  heroSubtitle: '체계적인 시스템과 검증된 수익 모델로 안정적인 창업을 지원합니다. 허위 매물 없는 정직한 매장 운영의 가치를 실현합니다.',
+  contactEmail: 'rhehfrh@hanmail.net',
+  benefits: [
+    {
+      id: 'b1',
+      title: '검증된 수익 구조',
+      description: '투명한 정산 시스템과 높은 인센티브 구조로 가맹점의 실질 수익을 극대화합니다.',
+      iconName: 'TrendingUp'
+    },
+    {
+      id: 'b2',
+      title: '체계적인 교육 지원',
+      description: '상담 기법부터 전산 업무까지, 초보 창업자도 전문가가 될 수 있도록 1:1 맞춤 교육을 제공합니다.',
+      iconName: 'Handshake'
+    },
+    {
+      id: 'b3',
+      title: '상권 분석 및 보호',
+      description: '데이터 기반 상권 분석으로 최적의 입지를 제안하며, 확실한 영업권 보호 정책을 고수합니다.',
+      iconName: 'MapPin'
+    }
+  ]
 };

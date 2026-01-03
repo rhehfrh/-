@@ -9,8 +9,8 @@ import {
   Instagram, 
   MessageCircle,
 } from 'lucide-react';
-import { GlobalState, Product, Post, SiteSettings } from './types';
-import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS } from './constants';
+import { GlobalState, Product, Post, SiteSettings, FranchiseSettings, FranchiseInquiry } from './types';
+import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS, INITIAL_FRANCHISE_SETTINGS } from './constants';
 
 // Pages
 import Home from './pages/Home';
@@ -147,7 +147,6 @@ export default function App() {
       const saved = localStorage.getItem('products');
       return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
     } catch (e) {
-      console.error("Failed to parse products from localStorage", e);
       return INITIAL_PRODUCTS;
     }
   });
@@ -156,7 +155,6 @@ export default function App() {
       const saved = localStorage.getItem('posts');
       return saved ? JSON.parse(saved) : INITIAL_POSTS;
     } catch (e) {
-      console.error("Failed to parse posts from localStorage", e);
       return INITIAL_POSTS;
     }
   });
@@ -165,8 +163,23 @@ export default function App() {
       const saved = localStorage.getItem('settings');
       return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
     } catch (e) {
-      console.error("Failed to parse settings from localStorage", e);
       return INITIAL_SETTINGS;
+    }
+  });
+  const [franchiseSettings, setFranchiseSettings] = useState<FranchiseSettings>(() => {
+    try {
+      const saved = localStorage.getItem('franchiseSettings');
+      return saved ? JSON.parse(saved) : INITIAL_FRANCHISE_SETTINGS;
+    } catch (e) {
+      return INITIAL_FRANCHISE_SETTINGS;
+    }
+  });
+  const [inquiries, setInquiries] = useState<FranchiseInquiry[]>(() => {
+    try {
+      const saved = localStorage.getItem('inquiries');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
     }
   });
 
@@ -182,13 +195,25 @@ export default function App() {
     localStorage.setItem('settings', JSON.stringify(settings));
   }, [settings]);
 
+  useEffect(() => {
+    localStorage.setItem('franchiseSettings', JSON.stringify(franchiseSettings));
+  }, [franchiseSettings]);
+
+  useEffect(() => {
+    localStorage.setItem('inquiries', JSON.stringify(inquiries));
+  }, [inquiries]);
+
   const value: GlobalState = {
     products,
     posts,
     settings,
+    franchiseSettings,
+    inquiries,
     updateProducts: setProducts,
     updatePosts: setPosts,
-    updateSettings: setSettings
+    updateSettings: setSettings,
+    updateFranchiseSettings: setFranchiseSettings,
+    updateInquiries: setInquiries
   };
 
   return (
