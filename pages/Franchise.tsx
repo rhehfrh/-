@@ -41,6 +41,9 @@ const AdvantageItem = ({ iconName, title, desc }: { iconName: string, title: str
 export default function Franchise() {
   const { franchiseSettings } = useGlobalState();
 
+  // 전화번호에서 숫자만 추출하여 tel: 링크 생성 (앱 선택 팝업 최소화)
+  const getCleanPhone = (phone: string) => phone.replace(/[^0-9]/g, '');
+
   return (
     <div className="bg-black min-h-screen text-white selection:bg-purple-500/30">
       <section className="relative pt-48 pb-24 px-4 overflow-hidden">
@@ -91,11 +94,11 @@ export default function Franchise() {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <a 
-                href={`tel:${franchiseSettings.contactNumber}`}
+                href={`tel:${getCleanPhone(franchiseSettings.contactNumber)}`}
                 className="w-full sm:w-auto flex items-center justify-center space-x-3 bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-2xl font-black text-lg transition-all transform hover:scale-105 shadow-xl shadow-purple-600/20"
               >
                 <Phone size={20} />
-                <span>본사 창업 상담 연결</span>
+                <span>본사 상담 {franchiseSettings.contactNumber}</span>
               </a>
               <button className="w-full sm:w-auto flex items-center justify-center space-x-2 text-zinc-400 hover:text-white font-bold transition-colors">
                 <span>카카오톡 채널 문의</span>
