@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useGlobalState } from '../App';
 import { Calendar, User, ChevronRight } from 'lucide-react';
 
@@ -16,25 +17,28 @@ export default function News() {
 
         <div className="space-y-16">
           {posts.map((post) => (
-            <article key={post.id} className="group cursor-pointer">
+            <article key={post.id} className="group">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-                <div className="aspect-[16/10] overflow-hidden rounded-3xl bg-zinc-900 border border-zinc-800">
+                <Link to={`/news/${post.id}`} className="block aspect-[16/10] overflow-hidden rounded-3xl bg-zinc-900 border border-zinc-800">
                   <img 
                     src={post.imageUrl} 
                     alt={post.title} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                </div>
+                </Link>
                 <div>
                   <div className="flex items-center space-x-4 text-xs text-zinc-500 mb-4 uppercase tracking-widest font-bold">
                     <span className="flex items-center"><Calendar size={14} className="mr-1" /> {post.date}</span>
                     <span className="flex items-center"><User size={14} className="mr-1" /> {post.author}</span>
                   </div>
-                  <h2 className="text-3xl font-bold text-white mb-4 group-hover:text-purple-400 transition-colors">{post.title}</h2>
+                  <Link to={`/news/${post.id}`} className="block">
+                    <h2 className="text-3xl font-bold text-white mb-4 group-hover:text-purple-400 transition-colors">{post.title}</h2>
+                  </Link>
                   <p className="text-zinc-400 text-lg leading-relaxed mb-8">{post.excerpt}</p>
-                  <button className="flex items-center text-purple-400 font-bold hover:translate-x-2 transition-transform">
-                    자세히 보기 <ChevronRight size={20} className="ml-1" />
-                  </button>
+                  <Link to={`/news/${post.id}`} className="inline-flex items-center text-purple-400 font-bold hover:translate-x-2 transition-transform group/btn">
+                    자세히 보기 
+                    <ChevronRight size={20} className="ml-1 group-hover/btn:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
               </div>
             </article>

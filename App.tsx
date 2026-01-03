@@ -16,6 +16,7 @@ import { INITIAL_PRODUCTS, INITIAL_POSTS, INITIAL_SETTINGS } from './constants';
 import Home from './pages/Home';
 import ProductGallery from './pages/ProductGallery';
 import News from './pages/News';
+import PostDetail from './pages/PostDetail';
 import Admin from './pages/Admin';
 
 const StateContext = createContext<GlobalState | undefined>(undefined);
@@ -198,6 +199,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<ProductGallery />} />
               <Route path="/news" element={<News />} />
+              <Route path="/news/:id" element={<PostDetail />} />
               <Route path="/admin/*" element={<Admin />} />
             </Routes>
           </main>
