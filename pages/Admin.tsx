@@ -48,6 +48,9 @@ const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: 
     <Link 
       to={`/admin${to}`}
       className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-purple-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}
+    >
+      <Icon size={20} />
+      <span className="font-medium">{label}</span>
     </Link>
   );
 };
@@ -135,15 +138,19 @@ const HomeManagement = () => {
       });
       
       let base64Image = '';
-      for (const part of response.candidates[0].content.parts) {
-        if (part.inlineData) {
-          base64Image = `data:image/png;base64,${part.inlineData.data}`;
-          break;
+      if (response.candidates?.[0]?.content?.parts) {
+        for (const part of response.candidates[0].content.parts) {
+          if (part.inlineData) {
+            base64Image = `data:image/png;base64,${part.inlineData.data}`;
+            break;
+          }
         }
       }
       
       if (base64Image) {
         setLocalSettings(prev => ({ ...prev, heroImageUrl: base64Image }));
+      } else {
+        alert('이미지를 생성하지 못했습니다. 다시 시도해주세요.');
       }
     } catch (error) {
       console.error(error);
@@ -575,10 +582,12 @@ const PostManagement = () => {
       });
       
       let base64Image = '';
-      for (const part of response.candidates[0].content.parts) {
-        if (part.inlineData) {
-          base64Image = `data:image/png;base64,${part.inlineData.data}`;
-          break;
+      if (response.candidates?.[0]?.content?.parts) {
+        for (const part of response.candidates[0].content.parts) {
+          if (part.inlineData) {
+            base64Image = `data:image/png;base64,${part.inlineData.data}`;
+            break;
+          }
         }
       }
       
