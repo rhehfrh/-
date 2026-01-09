@@ -48,31 +48,38 @@ export default function Home() {
   return (
     <div className="relative overflow-hidden">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center px-4 pt-20 bg-purple-gradient">
+      <section className="relative h-screen flex items-center justify-center px-4 pt-20 overflow-hidden bg-black">
+        {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px]"></div>
+          <img 
+            src={settings.heroImageUrl || 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=2000'} 
+            alt="Hero Background" 
+            className="w-full h-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black"></div>
+          <div className="absolute inset-0 bg-radial-gradient(circle at center, transparent 0%, black 100%) opacity-50"></div>
         </div>
         
         <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-sm font-medium mb-8 animate-bounce">
-            <Zap size={14} />
+          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-purple-600/20 border border-purple-500/30 text-purple-300 text-sm font-bold mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+            <Zap size={14} className="fill-current" />
             <span>프리미엄 혜택 상담 상시 대기중</span>
           </div>
-          <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter text-white leading-[1.1]">
+          <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter text-white leading-[1.1] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
             {settings.heroTitle.split(' ').map((word, i) => (
               <span key={i} className={i === 0 ? "block mb-2" : "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600"}>
                 {word} {i === 0 && <br className="hidden md:block"/>}
               </span>
             ))}
           </h1>
-          <p className="text-lg md:text-2xl text-zinc-400 mb-12 font-light max-w-2xl mx-auto">
+          <p className="text-lg md:text-2xl text-zinc-300 mb-12 font-light max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300">
             {settings.heroSubtitle}
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/products" className="w-full sm:w-auto px-10 py-5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-lg shadow-purple-600/25">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
+            <Link to="/products" className="w-full sm:w-auto px-10 py-5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-2xl shadow-purple-600/40">
               최신 기종 보러가기
             </Link>
-            <button className="w-full sm:w-auto px-10 py-5 bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-800 rounded-full font-bold text-lg transition-all">
+            <button className="w-full sm:w-auto px-10 py-5 bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md rounded-full font-bold text-lg transition-all transform hover:scale-105">
               1:1 컨설팅 신청
             </button>
           </div>

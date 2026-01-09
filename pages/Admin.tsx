@@ -48,9 +48,6 @@ const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: 
     <Link 
       to={`/admin${to}`}
       className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-purple-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}
-    >
-      <Icon size={20} />
-      <span className="font-medium">{label}</span>
     </Link>
   );
 };
@@ -108,10 +105,52 @@ const DashboardHome = () => {
 const HomeManagement = () => {
   const { settings, updateSettings } = useGlobalState();
   const [localSettings, setLocalSettings] = useState<SiteSettings>(settings);
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
+  const heroFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
     updateSettings(localSettings);
     alert('홈 화면 설정이 저장되었습니다.');
+  };
+
+  const onHeroFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const base64 = await fileToBase64(e.target.files[0]);
+      setLocalSettings(prev => ({ ...prev, heroImageUrl: base64 }));
+    }
+  };
+
+  const handleAiHeroImageGenerate = async () => {
+    setIsAiGenerating(true);
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const prompt = `A professional, high-end commercial photography background for a premium mobile phone shop. 
+                     Theme: "${localSettings.heroTitle}". 
+                     Cinematic lighting, futuristic technology mood, sleek metal and glass textures, blurred tech store environment in background. 
+                     Wide aspect ratio, 4k, no text.`;
+      
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash-image',
+        contents: { parts: [{ text: prompt }] }
+      });
+      
+      let base64Image = '';
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData) {
+          base64Image = `data:image/png;base64,${part.inlineData.data}`;
+          break;
+        }
+      }
+      
+      if (base64Image) {
+        setLocalSettings(prev => ({ ...prev, heroImageUrl: base64Image }));
+      }
+    } catch (error) {
+      console.error(error);
+      alert('AI 배경 이미지 생성에 실패했습니다.');
+    } finally {
+      setIsAiGenerating(false);
+    }
   };
 
   const updateFeature = (id: string, field: keyof HomeFeature, value: string) => {
@@ -125,7 +164,7 @@ const HomeManagement = () => {
   };
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 pb-20">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold">홈 디자인 관리</h2>
         <button onClick={handleSave} className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-purple-600/20">
@@ -134,7 +173,68 @@ const HomeManagement = () => {
         </button>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-12">
+        {/* 히어로 배경 이미지 설정 */}
+        <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 space-y-8">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2">
+              <ImageIcon size={20} />
+              <span>히어로 배경 이미지</span>
+            </h3>
+            <button 
+              onClick={handleAiHeroImageGenerate}
+              disabled={isAiGenerating}
+              className="flex items-center space-x-2 text-xs font-black text-purple-400 hover:text-white bg-purple-600/10 px-5 py-2.5 rounded-xl border border-purple-500/20 transition-all disabled:opacity-50"
+            >
+              <Sparkles size={14} className={isAiGenerating ? "animate-spin" : "animate-pulse"} />
+              <span>{isAiGenerating ? 'Gemini Drawing...' : 'AI 배경 자동 생성'}</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="relative aspect-video rounded-3xl overflow-hidden border border-zinc-800 bg-black group shadow-2xl">
+               <img 
+                 src={localSettings.heroImageUrl} 
+                 alt="Preview" 
+                 className="w-full h-full object-cover opacity-80"
+               />
+               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+               <div className="absolute bottom-6 left-6">
+                  <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Live Preview</div>
+                  <div className="text-white font-black text-sm">{localSettings.heroTitle}</div>
+               </div>
+               {isAiGenerating && (
+                 <div className="absolute inset-0 bg-black/60 backdrop-blur-md flex flex-col items-center justify-center">
+                    <Zap className="text-purple-500 animate-bounce mb-3" size={32} />
+                    <div className="text-sm text-purple-400 font-black animate-pulse uppercase tracking-[0.3em]">AI Studio Generating</div>
+                 </div>
+               )}
+            </div>
+            
+            <div className="flex flex-col justify-center space-y-6">
+               <div className="p-6 rounded-2xl bg-zinc-800/50 border border-white/5">
+                  <h4 className="text-sm font-bold text-white mb-2">이미지 최적화 가이드</h4>
+                  <ul className="text-xs text-zinc-500 space-y-2 list-disc pl-4">
+                    <li>권장 해상도: 1920x1080 (16:9) 이상</li>
+                    <li>텍스트 가독성을 위해 상단이 어두운 이미지가 좋습니다.</li>
+                    <li>AI 생성 시 현재 타이틀 내용을 바탕으로 컨셉을 잡습니다.</li>
+                  </ul>
+               </div>
+               <div className="flex space-x-4">
+                  <input type="file" ref={heroFileInputRef} onChange={onHeroFileChange} accept="image/*" className="hidden" />
+                  <button 
+                    onClick={() => heroFileInputRef.current?.click()}
+                    className="flex-grow flex items-center justify-center space-x-2 bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-4 rounded-2xl font-bold border border-white/5 transition-all"
+                  >
+                    <Upload size={18} />
+                    <span>파일 직접 업로드</span>
+                  </button>
+               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 히어로 문구 설정 */}
         <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 space-y-6">
           <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2">
             <Layout size={20} />
@@ -161,6 +261,7 @@ const HomeManagement = () => {
           </div>
         </div>
 
+        {/* 강점 카드 편집 */}
         <div className="space-y-6">
           <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2 px-2">
             <Zap size={20} />
@@ -173,7 +274,7 @@ const HomeManagement = () => {
                   <span className="text-xs font-black text-zinc-600 uppercase">카드 {idx + 1}</span>
                   <select 
                     value={feature.iconName}
-                    onChange={e => updateFeature(feature.id, 'iconName', e.target.value)}
+                    onChange={e => updateFeature(feature.id, 'iconName', e.target.value as any)}
                     className="bg-zinc-800 border border-zinc-700 rounded-lg p-1 text-xs text-zinc-400 outline-none"
                   >
                     <option value="Smartphone">스마트폰</option>
@@ -204,6 +305,7 @@ const HomeManagement = () => {
           </div>
         </div>
 
+        {/* 고객 후기 편집 */}
         <div className="space-y-6">
           <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2 px-2">
             <MessageSquare size={20} />

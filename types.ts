@@ -42,6 +42,7 @@ export interface SiteSettings {
   kakaoId: string;
   heroTitle: string;
   heroSubtitle: string;
+  heroImageUrl: string;
   features: HomeFeature[];
   testimonials: HomeTestimonial[];
 }
