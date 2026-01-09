@@ -25,7 +25,8 @@ import {
   Layout,
   Star,
   Eye,
-  Mail
+  Mail,
+  Link as LinkIcon
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 import { Product, Post, SiteSettings, FranchiseSettings, FranchiseBenefit, HomeFeature, HomeTestimonial } from '../types';
@@ -166,13 +167,14 @@ const HomeManagement = () => {
     <div className="space-y-12 pb-20 animate-in slide-in-from-bottom-4 duration-500">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold">홈 디자인 관리</h2>
-        <button onClick={handleSave} className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg">
+        <button onClick={handleSave} className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all active:scale-95">
           <Save size={20} />
           <span>저장하기</span>
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* 히어로 배경 관리 */}
         <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 space-y-6">
           <div className="flex justify-between items-center">
             <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2">
@@ -190,24 +192,44 @@ const HomeManagement = () => {
           <button onClick={() => heroFileInputRef.current?.click()} className="w-full bg-zinc-800 hover:bg-zinc-700 p-3 rounded-xl text-sm font-bold transition-colors">이미지 업로드</button>
         </div>
 
+        {/* 배지 및 링크 관리 */}
         <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 space-y-6">
           <div className="flex justify-between items-center">
             <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2">
               <Sparkles size={20} />
-              <span>상단 왼쪽 배지 (로고)</span>
+              <span>상단 왼쪽 배지 관리</span>
             </h3>
             <button onClick={handleAiBadgeGenerate} disabled={isBadgeGenerating} className="text-xs text-purple-400 bg-purple-600/10 px-3 py-1.5 rounded-lg border border-purple-500/20 hover:bg-purple-600/20 transition-all">
               {isBadgeGenerating ? '생성 중...' : 'AI 생성'}
             </button>
           </div>
-          <div className="flex items-center space-x-6">
-            <div className="w-32 h-32 rounded-2xl overflow-hidden bg-zinc-950 border border-white/5 flex items-center justify-center p-4">
-              <img src={localSettings.heroBadgeUrl} className="max-w-full max-h-full object-contain" alt="Badge Preview" />
-            </div>
-            <div className="flex-grow space-y-3">
-              <p className="text-xs text-zinc-500 leading-relaxed">배지는 홈 화면 좌측 상단에 떠 있는 작은 이미지입니다. 투명 배경 이미지를 권장합니다.</p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-4">
+               <div className="aspect-square rounded-2xl overflow-hidden bg-zinc-950 border border-white/5 flex items-center justify-center p-4">
+                <img src={localSettings.heroBadgeUrl} className="max-w-full max-h-full object-contain" alt="Badge Preview" />
+              </div>
               <input type="file" ref={badgeFileInputRef} onChange={onBadgeFileChange} className="hidden" accept="image/*" />
-              <button onClick={() => badgeFileInputRef.current?.click()} className="w-full bg-zinc-800 hover:bg-zinc-700 p-3 rounded-xl text-sm font-bold transition-colors">파일 교체</button>
+              <button onClick={() => badgeFileInputRef.current?.click()} className="w-full bg-zinc-800 hover:bg-zinc-700 p-2.5 rounded-xl text-xs font-bold transition-colors">배지 이미지 교체</button>
+            </div>
+            
+            <div className="flex flex-col justify-end space-y-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-zinc-500 flex items-center space-x-1">
+                  <LinkIcon size={12} />
+                  <span>배지 클릭 시 이동할 URL</span>
+                </label>
+                <input 
+                  type="text" 
+                  value={localSettings.heroBadgeLinkUrl || ''} 
+                  placeholder="예: 사전승낙서 이미지 URL 또는 페이지 주소"
+                  onChange={e => setLocalSettings({...localSettings, heroBadgeLinkUrl: e.target.value})} 
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-3 text-xs text-white focus:outline-none focus:border-purple-500"
+                />
+              </div>
+              <p className="text-[10px] text-zinc-500 leading-relaxed italic">
+                배지는 홈 화면 상단 왼쪽에 표시되며, 현재 크기가 3배 확대되어 노출됩니다. 투명 배경 이미지를 사용하면 더욱 깔끔합니다.
+              </p>
             </div>
           </div>
         </div>
@@ -229,6 +251,8 @@ const HomeManagement = () => {
     </div>
   );
 };
+
+// ... (Rest of Admin code remains the same as before)
 
 const ProductManagement = () => {
   const { products, updateProducts } = useGlobalState();
@@ -321,7 +345,6 @@ export default function Admin() {
           <Route path="/" element={<DashboardHome />} />
           <Route path="/home-ui" element={<HomeManagement />} />
           <Route path="/products" element={<ProductManagement />} />
-          {/* 추가 라우트는 여기서 연결 */}
           <Route path="*" element={<DashboardHome />} />
         </Routes>
       </main>

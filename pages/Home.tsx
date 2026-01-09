@@ -54,14 +54,25 @@ export default function Home() {
     <div className="relative overflow-hidden">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center px-4 pt-20 overflow-hidden bg-black">
-        {/* 상단 왼쪽 배지 이미지 (관리자 설정) */}
+        {/* 상단 왼쪽 배지 이미지 - 3배 확대 및 클릭 링크 적용 */}
         {settings?.heroBadgeUrl && (
-          <div className="absolute top-28 left-8 z-30 animate-pulse">
-            <img 
-              src={settings.heroBadgeUrl} 
-              alt="Badge" 
-              className="w-12 h-12 md:w-20 md:h-20 object-contain drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"
-            />
+          <div className="absolute top-28 left-8 z-30 group">
+            <a 
+              href={settings.heroBadgeLinkUrl || "#"} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block animate-pulse hover:animate-none transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+              title="사전승낙서 확인하기"
+            >
+              <img 
+                src={settings.heroBadgeUrl} 
+                alt="사전승낙서" 
+                className="w-36 h-36 md:w-60 md:h-60 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]"
+              />
+              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] md:text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold">
+                사전승낙서 보기
+              </div>
+            </a>
           </div>
         )}
 

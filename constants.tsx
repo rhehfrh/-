@@ -46,6 +46,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   heroSubtitle: '프리미엄 모바일 라이프의 시작, 바를정 핸드폰',
   heroImageUrl: 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=2000',
   heroBadgeUrl: 'https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304603353591041.svg',
+  heroBadgeLinkUrl: 'https://pinf.ict.or.kr/', // 기본 사전승낙서 확인 페이지 링크
   features: [
     {
       id: '1',
