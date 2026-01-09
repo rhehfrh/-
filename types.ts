@@ -24,6 +24,7 @@ export interface SiteSettings {
   siteName: string;
   contactNumber: string;
   address: string;
+  mapUrl: string; // Added field for map integration
   instagram: string;
   kakaoId: string;
   heroTitle: string;
@@ -48,7 +49,7 @@ export interface FranchiseBenefit {
 
 export interface FranchiseSettings {
   heroSubtitle: string;
-  contactNumber: string; // Added field for franchise-specific contact
+  contactNumber: string;
   benefits: FranchiseBenefit[];
 }
 

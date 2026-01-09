@@ -23,7 +23,8 @@ const IconMap: Record<string, any> = {
   Smartphone
 };
 
-const AdvantageItem = ({ iconName, title, desc }: { iconName: string, title: string, desc: string }) => {
+// Added optional key property to props type to fix TS error when component is used in a map
+const AdvantageItem = ({ iconName, title, desc }: { iconName: string, title: string, desc: string, key?: React.Key }) => {
   const Icon = IconMap[iconName] || Zap;
   return (
     <div className="flex items-start space-x-6 p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-purple-500/30 transition-all">
@@ -119,12 +120,8 @@ export default function Franchise() {
           </div>
         </div>
       </section>
-
-      <footer className="py-20 border-t border-white/5 text-center">
-        <p className="text-zinc-600 text-sm font-bold uppercase tracking-[0.3em]">
-          Honesty is the Best Value
-        </p>
-      </footer>
+      
+      {/* Redundant local footer removed. Global App footer will be used instead. */}
     </div>
   );
 }

@@ -9,7 +9,9 @@ import {
   ChevronRight,
   Zap,
   Star,
-  Handshake
+  Handshake,
+  MapPin,
+  ExternalLink
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 
@@ -163,6 +165,57 @@ export default function Home() {
                </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Store Location Section - NEW */}
+      <section className="py-24 bg-black relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div className="text-center mb-16">
+              <span className="text-purple-500 font-bold tracking-[0.3em] uppercase text-xs mb-4 block">Visit Our Store</span>
+              <h2 className="text-4xl font-black text-white">오시는 길</h2>
+           </div>
+           
+           <div className="max-w-4xl mx-auto">
+             <div className="p-1 rounded-[2.5rem] bg-gradient-to-br from-white/10 to-purple-600/20">
+                <div className="bg-zinc-900/90 backdrop-blur-xl rounded-[calc(2.5rem-4px)] overflow-hidden flex flex-col md:flex-row">
+                   <div className="md:w-1/2 p-10 flex flex-col justify-center">
+                      <div className="flex items-center space-x-2 text-purple-400 mb-6">
+                        <MapPin size={24} />
+                        <span className="font-black tracking-tighter text-xl">바를정 핸드폰 본점</span>
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-4 leading-snug">
+                         {settings.address}
+                      </h3>
+                      <p className="text-zinc-500 text-sm mb-10 leading-relaxed">
+                         방문 전 연락 주시면 대기 시간 없이<br />
+                         전문 상담원의 밀착 컨설팅을 받으실 수 있습니다.
+                      </p>
+                      <a 
+                        href={settings.mapUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center space-x-3 bg-white text-black hover:bg-zinc-200 py-4 rounded-2xl font-black transition-all group"
+                      >
+                         <span>지도에서 확인하기</span>
+                         <ExternalLink size={18} className="group-hover:translate-y-[-2px] group-hover:translate-x-[2px] transition-transform" />
+                      </a>
+                   </div>
+                   <div className="md:w-1/2 bg-zinc-800 relative min-h-[300px] overflow-hidden">
+                      <img 
+                        src="https://images.unsplash.com/photo-1577083288073-40892c0860a4?auto=format&fit=crop&q=80&w=800" 
+                        alt="Store location" 
+                        className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-zinc-900 to-transparent"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                         <div className="w-16 h-16 rounded-full bg-purple-600/20 border border-purple-500/50 flex items-center justify-center animate-ping absolute"></div>
+                         <MapPin size={48} className="text-purple-500 relative z-10" />
+                      </div>
+                   </div>
+                </div>
+             </div>
+           </div>
         </div>
       </section>
 
