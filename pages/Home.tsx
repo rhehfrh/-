@@ -45,7 +45,6 @@ export default function Home() {
   const { products, settings } = useGlobalState();
   const featuredProducts = (products || []).filter(p => p.isFeatured).slice(0, 3);
   
-  // Safe Title Rendering
   const heroTitle = settings?.heroTitle || "정직함이 곧 가치입니다";
   const heroSubtitle = settings?.heroSubtitle || "프리미엄 모바일 라이프의 시작, 바를정 핸드폰";
   const features = settings?.features || [];
@@ -55,13 +54,13 @@ export default function Home() {
     <div className="relative overflow-hidden">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center px-4 pt-20 overflow-hidden bg-black">
-        {/* Top Left Badge Image */}
+        {/* 상단 왼쪽 배지 이미지 (관리자 설정) */}
         {settings?.heroBadgeUrl && (
-          <div className="absolute top-28 left-8 z-20 animate-bounce duration-[3000ms]">
+          <div className="absolute top-28 left-8 z-30 animate-pulse">
             <img 
               src={settings.heroBadgeUrl} 
               alt="Badge" 
-              className="w-16 h-16 md:w-24 md:h-24 object-contain filter drop-shadow-[0_0_15px_rgba(147,51,234,0.5)]"
+              className="w-12 h-12 md:w-20 md:h-20 object-contain drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"
             />
           </div>
         )}
@@ -99,9 +98,9 @@ export default function Home() {
             <Link to="/products" className="w-full sm:w-auto px-10 py-5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-2xl shadow-purple-600/40">
               최신 기종 보러가기
             </Link>
-            <button className="w-full sm:w-auto px-10 py-5 bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md rounded-full font-bold text-lg transition-all transform hover:scale-105">
+            <Link to="/franchise" className="w-full sm:w-auto px-10 py-5 bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md rounded-full font-bold text-lg transition-all transform hover:scale-105">
               1:1 컨설팅 신청
-            </button>
+            </Link>
           </div>
         </div>
       </section>
