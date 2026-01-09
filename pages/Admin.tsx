@@ -30,20 +30,11 @@ import {
   Users,
   Mail,
   Eye,
-  Phone,
-  Map as MapIcon,
-  ExternalLink,
-  Search
+  Phone
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 import { Product, Post, SiteSettings, FranchiseSettings, FranchiseBenefit, FranchiseInquiry } from '../types';
 import { GoogleGenAI } from "@google/genai";
-
-declare global {
-  interface Window {
-    daum: any;
-  }
-}
 
 const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: string }) => {
   const location = useLocation();
@@ -600,129 +591,29 @@ const SettingsManagement = () => {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  const handleAddressSearch = () => {
-    if (!window.daum || !window.daum.Postcode) {
-      alert('주소 검색 서비스를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
-      return;
-    }
-
-    new window.daum.Postcode({
-      oncomplete: (data: any) => {
-        let fullAddress = data.address;
-        let extraAddress = '';
-
-        if (data.addressType === 'R') {
-          if (data.bname !== '') extraAddress += data.bname;
-          if (data.buildingName !== '') extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
-          fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
-        }
-
-        setLocalSettings(prev => ({ ...prev, address: fullAddress }));
-      }
-    }).open();
-  };
-
   return (
     <div className="space-y-8 max-w-4xl">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold">사이트 설정</h2>
-        <div className="flex items-center space-x-2 text-xs text-zinc-500 font-bold bg-zinc-900 px-4 py-2 rounded-xl border border-zinc-800">
-           <Monitor size={14} className="text-purple-500" />
-           <span>Live Frontend Synchronized</span>
+      <h2 className="text-3xl font-bold">사이트 설정</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 rounded-3xl bg-zinc-900 border border-zinc-800 shadow-2xl">
+        <div className="space-y-4">
+          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">사이트명</label>
+          <input type="text" value={localSettings.siteName} onChange={e => setLocalSettings({...localSettings, siteName: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
+          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">연락처</label>
+          <input type="text" value={localSettings.contactNumber} onChange={e => setLocalSettings({...localSettings, contactNumber: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
+          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">매장 주소</label>
+          <input type="text" value={localSettings.address} onChange={e => setLocalSettings({...localSettings, address: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
+        </div>
+        <div className="space-y-4">
+          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">인스타그램 ID</label>
+          <input type="text" value={localSettings.instagram} onChange={e => setLocalSettings({...localSettings, instagram: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
+          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">카카오톡 ID</label>
+          <input type="text" value={localSettings.kakaoId} onChange={e => setLocalSettings({...localSettings, kakaoId: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
         </div>
       </div>
-
-      <div className="grid grid-cols-1 gap-8">
-        {/* 기본 정보 */}
-        <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 shadow-2xl space-y-6">
-          <h3 className="text-lg font-bold text-purple-400 flex items-center space-x-2">
-            <Monitor size={20} />
-            <span>기본 정보 관리</span>
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">사이트명</label>
-              <input type="text" value={localSettings.siteName} onChange={e => setLocalSettings({...localSettings, siteName: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">연락처</label>
-              <input type="text" value={localSettings.contactNumber} onChange={e => setLocalSettings({...localSettings, contactNumber: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
-            </div>
-          </div>
-        </div>
-
-        {/* 위치 및 지도 정보 */}
-        <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 shadow-2xl space-y-6">
-          <h3 className="text-lg font-bold text-purple-400 flex items-center space-x-2">
-            <MapIcon size={20} />
-            <span>위치 안내 및 주소 변경</span>
-          </h3>
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">매장 주소 (텍스트)</label>
-                <button 
-                  onClick={handleAddressSearch}
-                  className="flex items-center space-x-1.5 bg-zinc-800 hover:bg-zinc-700 text-purple-400 px-3 py-1.5 rounded-lg border border-white/5 text-[10px] font-black transition-colors"
-                >
-                  <Search size={12} />
-                  <span>주소 검색</span>
-                </button>
-              </div>
-              <input 
-                type="text" 
-                value={localSettings.address} 
-                onChange={e => setLocalSettings({...localSettings, address: e.target.value})} 
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" 
-                placeholder="예: 서울특별시 강남구 테헤란로 123" 
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">지도 연결 URL (네이버/카카오)</label>
-                {localSettings.mapUrl && (
-                  <a href={localSettings.mapUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] text-purple-400 hover:text-white flex items-center space-x-1">
-                    <span>링크 확인하기</span>
-                    <ExternalLink size={10} />
-                  </a>
-                )}
-              </div>
-              <input 
-                type="text" 
-                value={localSettings.mapUrl} 
-                onChange={e => setLocalSettings({...localSettings, mapUrl: e.target.value})} 
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500 font-mono text-sm" 
-                placeholder="https://naver.me/... 또는 https://kko.to/..." 
-              />
-              <p className="text-[10px] text-zinc-600 px-1 italic">네이버 지도나 카카오 맵 앱에서 '공유하기 > 링크 복사' 후 붙여넣으세요.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* SNS 계정 */}
-        <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 shadow-2xl space-y-6">
-          <h3 className="text-lg font-bold text-purple-400 flex items-center space-x-2">
-            <MessageSquare size={20} />
-            <span>SNS 채널 관리</span>
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">인스타그램 ID</label>
-              <input type="text" value={localSettings.instagram} onChange={e => setLocalSettings({...localSettings, instagram: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">카카오톡 ID</label>
-              <input type="text" value={localSettings.kakaoId} onChange={e => setLocalSettings({...localSettings, kakaoId: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500" />
-            </div>
-          </div>
-        </div>
-      </div>
-
       <button onClick={handleSave} className="bg-purple-600 hover:bg-purple-700 text-white px-10 py-4 rounded-2xl font-bold shadow-lg shadow-purple-600/20 transition-all flex items-center space-x-2">
         <Save size={20} />
         <span>전체 설정 저장</span>
       </button>
-
       {showToast && (
         <div className="fixed bottom-10 right-10 flex items-center space-x-3 bg-green-500 text-white px-8 py-5 rounded-3xl shadow-3xl animate-bounce z-50">
           <CheckCircle2 size={24} />

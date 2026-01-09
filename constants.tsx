@@ -40,7 +40,6 @@ export const INITIAL_SETTINGS: SiteSettings = {
   siteName: '바를정 핸드폰',
   contactNumber: '010-1234-5678',
   address: '서울특별시 강남구 테헤란로 123',
-  mapUrl: 'https://map.naver.com', // Default map URL
   instagram: 'bareuljeong_mobile',
   kakaoId: 'bareuljeong',
   heroTitle: '정직함이 곧 가치입니다',

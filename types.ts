@@ -24,7 +24,6 @@ export interface SiteSettings {
   siteName: string;
   contactNumber: string;
   address: string;
-  mapUrl: string; // Added field for map integration
   instagram: string;
   kakaoId: string;
   heroTitle: string;

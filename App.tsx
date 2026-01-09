@@ -122,14 +122,9 @@ const Footer = () => {
           </div>
           <div>
             <h4 className="text-white font-semibold mb-6">위치 안내</h4>
-            <a 
-              href={settings.mapUrl} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-zinc-400 text-sm hover:text-purple-400 transition-colors"
-            >
+            <p className="text-zinc-400 text-sm">
               {settings.address}
-            </a>
+            </p>
             <div className="mt-6 flex space-x-4">
                <a href={`https://instagram.com/${settings.instagram}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-purple-600 transition-colors">
                  <Instagram size={20} />
