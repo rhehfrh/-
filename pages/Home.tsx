@@ -43,7 +43,13 @@ const FeatureCard = ({ iconName, title, description }: { iconName: string, title
 
 export default function Home() {
   const { products, settings } = useGlobalState();
-  const featuredProducts = products.filter(p => p.isFeatured).slice(0, 3);
+  const featuredProducts = (products || []).filter(p => p.isFeatured).slice(0, 3);
+  
+  // Safe Title Rendering
+  const heroTitle = settings?.heroTitle || "정직함이 곧 가치입니다";
+  const heroSubtitle = settings?.heroSubtitle || "프리미엄 모바일 라이프의 시작, 바를정 핸드폰";
+  const features = settings?.features || [];
+  const testimonials = settings?.testimonials || [];
 
   return (
     <div className="relative overflow-hidden">
@@ -52,30 +58,34 @@ export default function Home() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
-            src={settings.heroImageUrl || 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=2000'} 
+            src={settings?.heroImageUrl || 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=2000'} 
             alt="Hero Background" 
             className="w-full h-full object-cover opacity-60"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black"></div>
-          <div className="absolute inset-0 bg-radial-gradient(circle at center, transparent 0%, black 100%) opacity-50"></div>
+          {/* Use inline style for radial gradient to ensure compatibility */}
+          <div 
+            className="absolute inset-0 opacity-50"
+            style={{ background: 'radial-gradient(circle at center, transparent 0%, black 100%)' }}
+          ></div>
         </div>
         
         <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-purple-600/20 border border-purple-500/30 text-purple-300 text-sm font-bold mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-purple-600/20 border border-purple-500/30 text-purple-300 text-sm font-bold mb-8">
             <Zap size={14} className="fill-current" />
             <span>프리미엄 혜택 상담 상시 대기중</span>
           </div>
-          <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter text-white leading-[1.1] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-            {settings.heroTitle.split(' ').map((word, i) => (
+          <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter text-white leading-[1.1]">
+            {heroTitle.split(' ').map((word, i) => (
               <span key={i} className={i === 0 ? "block mb-2" : "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600"}>
                 {word} {i === 0 && <br className="hidden md:block"/>}
               </span>
             ))}
           </h1>
-          <p className="text-lg md:text-2xl text-zinc-300 mb-12 font-light max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300">
-            {settings.heroSubtitle}
+          <p className="text-lg md:text-2xl text-zinc-300 mb-12 font-light max-w-2xl mx-auto leading-relaxed">
+            {heroSubtitle}
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/products" className="w-full sm:w-auto px-10 py-5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-2xl shadow-purple-600/40">
               최신 기종 보러가기
             </Link>
@@ -132,7 +142,7 @@ export default function Home() {
             <p className="text-zinc-400 max-w-2xl mx-auto">우리는 단순한 판매를 넘어, 고객의 디지털 삶을 업그레이드합니다.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {settings.features.map((feature) => (
+            {features.map((feature) => (
               <FeatureCard 
                 key={feature.id}
                 iconName={feature.iconName} 
@@ -186,7 +196,7 @@ export default function Home() {
                 이미 수많은 분들이 <span className="text-purple-500">바를정</span>을 선택했습니다.
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {settings.testimonials.map((testimonial) => (
+                {testimonials.map((testimonial) => (
                     <div key={testimonial.id} className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
                         <div className="flex justify-center mb-4 text-yellow-500">
                             {[...Array(5)].map((_, j) => (
