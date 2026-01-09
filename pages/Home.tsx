@@ -10,19 +10,36 @@ import {
   Zap,
   Star,
   Handshake,
-  MapPin
+  MapPin,
+  Smile,
+  Heart,
+  Check
 } from 'lucide-react';
 import { useGlobalState } from '../App';
 
-const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
-  <div className="p-8 rounded-2xl bg-zinc-900/50 border border-purple-900/20 hover:border-purple-600/50 transition-all group">
-    <div className="w-14 h-14 rounded-xl bg-purple-600/20 flex items-center justify-center mb-6 group-hover:bg-purple-600 transition-colors">
-      <Icon size={28} className="text-purple-400 group-hover:text-white" />
+const IconMap: Record<string, any> = {
+  Smartphone,
+  TrendingUp,
+  ShieldCheck,
+  Award,
+  Zap,
+  Smile,
+  Heart,
+  Check
+};
+
+const FeatureCard = ({ iconName, title, description }: { iconName: string, title: string, description: string }) => {
+  const Icon = IconMap[iconName] || Zap;
+  return (
+    <div className="p-8 rounded-2xl bg-zinc-900/50 border border-purple-900/20 hover:border-purple-600/50 transition-all group">
+      <div className="w-14 h-14 rounded-xl bg-purple-600/20 flex items-center justify-center mb-6 group-hover:bg-purple-600 transition-colors">
+        <Icon size={28} className="text-purple-400 group-hover:text-white" />
+      </div>
+      <h3 className="text-xl font-bold mb-3 text-white">{title}</h3>
+      <p className="text-zinc-400 leading-relaxed text-sm">{description}</p>
     </div>
-    <h3 className="text-xl font-bold mb-3 text-white">{title}</h3>
-    <p className="text-zinc-400 leading-relaxed text-sm">{description}</p>
-  </div>
-);
+  );
+};
 
 export default function Home() {
   const { products, settings } = useGlobalState();
@@ -100,7 +117,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Value Prop */}
+      {/* Value Prop (Features) */}
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -108,26 +125,14 @@ export default function Home() {
             <p className="text-zinc-400 max-w-2xl mx-auto">우리는 단순한 판매를 넘어, 고객의 디지털 삶을 업그레이드합니다.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <FeatureCard 
-              icon={Smartphone} 
-              title="최신 기종 보유" 
-              description="출시와 동시에 가장 빠르게 최신 기종을 확보하여 공급합니다."
-            />
-            <FeatureCard 
-              icon={TrendingUp} 
-              title="최저가 약속" 
-              description="복잡한 결합 할인을 제외하더라도 정직한 가격으로 승부합니다."
-            />
-            <FeatureCard 
-              icon={ShieldCheck} 
-              title="철저한 사후관리" 
-              description="기기 불량부터 데이터 이전까지 완벽하게 책임지고 도와드립니다."
-            />
-            <FeatureCard 
-              icon={Award} 
-              title="프리미엄 상담" 
-              description="통신 경력 10년 이상의 전문가가 라이프스타일에 맞춘 요금제를 제안합니다."
-            />
+            {settings.features.map((feature) => (
+              <FeatureCard 
+                key={feature.id}
+                iconName={feature.iconName} 
+                title={feature.title} 
+                description={feature.description}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -167,20 +172,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trust Section */}
+      {/* Trust Section (Testimonials) */}
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-4xl font-black text-white mb-8">
                 이미 수많은 분들이 <span className="text-purple-500">바를정</span>을 선택했습니다.
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {[1, 2, 3].map(i => (
-                    <div key={i} className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
+                {settings.testimonials.map((testimonial) => (
+                    <div key={testimonial.id} className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
                         <div className="flex justify-center mb-4 text-yellow-500">
-                            {[...Array(5)].map((_, j) => <Star key={j} size={16} fill="currentColor" />)}
+                            {[...Array(5)].map((_, j) => (
+                              <Star 
+                                key={j} 
+                                size={16} 
+                                fill={j < testimonial.rating ? "currentColor" : "none"} 
+                                className={j < testimonial.rating ? "" : "text-zinc-700"}
+                              />
+                            ))}
                         </div>
-                        <p className="text-zinc-400 italic mb-4">"설명이 너무 친절하시고, 제게 꼭 필요한 요금제만 골라주셔서 정말 만족스럽습니다."</p>
-                        <span className="text-zinc-500 text-sm">- 만족 고객 후기</span>
+                        <p className="text-zinc-400 italic mb-4">"{testimonial.content}"</p>
+                        <span className="text-zinc-500 text-sm">- {testimonial.name}</span>
                     </div>
                 ))}
             </div>

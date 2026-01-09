@@ -43,7 +43,53 @@ export const INITIAL_SETTINGS: SiteSettings = {
   instagram: 'bareuljeong_mobile',
   kakaoId: 'bareuljeong',
   heroTitle: '정직함이 곧 가치입니다',
-  heroSubtitle: '프리미엄 모바일 라이프의 시작, 바를정 핸드폰'
+  heroSubtitle: '프리미엄 모바일 라이프의 시작, 바를정 핸드폰',
+  features: [
+    {
+      id: '1',
+      iconName: 'Smartphone',
+      title: '최신 기종 보유',
+      description: '출시와 동시에 가장 빠르게 최신 기종을 확보하여 공급합니다.'
+    },
+    {
+      id: '2',
+      iconName: 'TrendingUp',
+      title: '최저가 약속',
+      description: '복잡한 결합 할인을 제외하더라도 정직한 가격으로 승부합니다.'
+    },
+    {
+      id: '3',
+      iconName: 'ShieldCheck',
+      title: '철저한 사후관리',
+      description: '기기 불량부터 데이터 이전까지 완벽하게 책임지고 도와드립니다.'
+    },
+    {
+      id: '4',
+      iconName: 'Award',
+      title: '프리미엄 상담',
+      description: '통신 경력 10년 이상의 전문가가 라이프스타일에 맞춘 요금제를 제안합니다.'
+    }
+  ],
+  testimonials: [
+    {
+      id: '1',
+      name: '이정우 고객님',
+      content: '설명이 너무 친절하시고, 제게 꼭 필요한 요금제만 골라주셔서 정말 만족스럽습니다.',
+      rating: 5
+    },
+    {
+      id: '2',
+      name: '김서연 고객님',
+      content: '다른 곳보다 지원금도 확실하고 데이터 이동도 깔끔하게 해주셔서 좋았어요.',
+      rating: 5
+    },
+    {
+      id: '3',
+      name: '박진호 고객님',
+      content: '매장이 깔끔하고 사장님이 정직하게 상담해주시는 게 느껴져서 믿음이 갑니다.',
+      rating: 4
+    }
+  ]
 };
 
 export const INITIAL_FRANCHISE_SETTINGS: FranchiseSettings = {

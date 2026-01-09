@@ -30,10 +30,15 @@ import {
   Users,
   Mail,
   Eye,
-  Phone
+  Phone,
+  Layout,
+  Star,
+  Smile,
+  Heart,
+  Check
 } from 'lucide-react';
 import { useGlobalState } from '../App';
-import { Product, Post, SiteSettings, FranchiseSettings, FranchiseBenefit, FranchiseInquiry } from '../types';
+import { Product, Post, SiteSettings, FranchiseSettings, FranchiseBenefit, FranchiseInquiry, HomeFeature, HomeTestimonial } from '../types';
 import { GoogleGenAI } from "@google/genai";
 
 const SidebarLink = ({ to, icon: Icon, label }: { to: string, icon: any, label: string }) => {
@@ -94,6 +99,153 @@ const DashboardHome = () => {
           </div>
           <div className="text-zinc-500 text-sm font-bold uppercase mb-2">새 창업 문의</div>
           <div className="text-5xl font-black text-purple-500">{inquiries.length}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const HomeManagement = () => {
+  const { settings, updateSettings } = useGlobalState();
+  const [localSettings, setLocalSettings] = useState<SiteSettings>(settings);
+
+  const handleSave = () => {
+    updateSettings(localSettings);
+    alert('홈 화면 설정이 저장되었습니다.');
+  };
+
+  const updateFeature = (id: string, field: keyof HomeFeature, value: string) => {
+    const newFeatures = localSettings.features.map(f => f.id === id ? { ...f, [field]: value } : f);
+    setLocalSettings({ ...localSettings, features: newFeatures });
+  };
+
+  const updateTestimonial = (id: string, field: keyof HomeTestimonial, value: string | number) => {
+    const newTestimonials = localSettings.testimonials.map(t => t.id === id ? { ...t, [field]: value } : t);
+    setLocalSettings({ ...localSettings, testimonials: newTestimonials });
+  };
+
+  return (
+    <div className="space-y-12">
+      <div className="flex justify-between items-center">
+        <h2 className="text-3xl font-bold">홈 디자인 관리</h2>
+        <button onClick={handleSave} className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-purple-600/20">
+          <Save size={20} />
+          <span>설정 저장</span>
+        </button>
+      </div>
+
+      <div className="space-y-8">
+        <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 space-y-6">
+          <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2">
+            <Layout size={20} />
+            <span>히어로 섹션 문구</span>
+          </h3>
+          <div className="grid grid-cols-1 gap-6">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-zinc-500 uppercase">메인 타이틀</label>
+              <input 
+                type="text" 
+                value={localSettings.heroTitle}
+                onChange={e => setLocalSettings({...localSettings, heroTitle: e.target.value})}
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-zinc-500 uppercase">서브 타이틀</label>
+              <textarea 
+                value={localSettings.heroSubtitle}
+                onChange={e => setLocalSettings({...localSettings, heroSubtitle: e.target.value})}
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-purple-500 h-24 resize-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2 px-2">
+            <Zap size={20} />
+            <span>강점 카드 (Features)</span>
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {localSettings.features.map((feature, idx) => (
+              <div key={feature.id} className="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-zinc-600 uppercase">카드 {idx + 1}</span>
+                  <select 
+                    value={feature.iconName}
+                    onChange={e => updateFeature(feature.id, 'iconName', e.target.value)}
+                    className="bg-zinc-800 border border-zinc-700 rounded-lg p-1 text-xs text-zinc-400 outline-none"
+                  >
+                    <option value="Smartphone">스마트폰</option>
+                    <option value="TrendingUp">성장/차트</option>
+                    <option value="ShieldCheck">보안/인증</option>
+                    <option value="Award">수상/품질</option>
+                    <option value="Zap">번개/속도</option>
+                    <option value="Smile">미소/친절</option>
+                    <option value="Heart">사랑/진심</option>
+                    <option value="Check">체크/확정</option>
+                  </select>
+                </div>
+                <input 
+                  type="text" 
+                  value={feature.title}
+                  onChange={e => updateFeature(feature.id, 'title', e.target.value)}
+                  placeholder="제목"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-3 text-white text-sm focus:border-purple-500 outline-none"
+                />
+                <textarea 
+                  value={feature.description}
+                  onChange={e => updateFeature(feature.id, 'description', e.target.value)}
+                  placeholder="설명"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-3 text-white text-sm h-20 focus:border-purple-500 outline-none resize-none"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <h3 className="text-xl font-bold text-purple-400 flex items-center space-x-2 px-2">
+            <MessageSquare size={20} />
+            <span>고객 후기 (Testimonials)</span>
+          </h3>
+          <div className="grid grid-cols-1 gap-4">
+            {localSettings.testimonials.map((testimonial, idx) => (
+              <div key={testimonial.id} className="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
+                <div className="space-y-2">
+                   <label className="text-[10px] font-bold text-zinc-600 uppercase">고객 성함</label>
+                   <input 
+                    type="text" 
+                    value={testimonial.name}
+                    onChange={e => updateTestimonial(testimonial.id, 'name', e.target.value)}
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-3 text-white text-xs focus:border-purple-500 outline-none"
+                  />
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                   <label className="text-[10px] font-bold text-zinc-600 uppercase">후기 내용</label>
+                   <textarea 
+                    value={testimonial.content}
+                    onChange={e => updateTestimonial(testimonial.id, 'content', e.target.value)}
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-3 text-white text-xs h-16 focus:border-purple-500 outline-none resize-none"
+                  />
+                </div>
+                <div className="space-y-2">
+                   <label className="text-[10px] font-bold text-zinc-600 uppercase">별점 (1-5)</label>
+                   <div className="flex items-center space-x-2">
+                      {[1, 2, 3, 4, 5].map(star => (
+                        <button 
+                          key={star} 
+                          onClick={() => updateTestimonial(testimonial.id, 'rating', star)}
+                          className={`transition-colors ${testimonial.rating >= star ? 'text-yellow-500' : 'text-zinc-700'}`}
+                        >
+                          <Star size={20} fill={testimonial.rating >= star ? 'currentColor' : 'none'} />
+                        </button>
+                      ))}
+                   </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -645,6 +797,7 @@ export default function Admin() {
           <SidebarLink to="" icon={LayoutDashboard} label="홈" />
           <SidebarLink to="/products" icon={Package} label="제품 관리" />
           <SidebarLink to="/posts" icon={Newspaper} label="소식 관리" />
+          <SidebarLink to="/home-ui" icon={Layout} label="홈 디자인" />
           <SidebarLink to="/franchise" icon={Handshake} label="창업 관리" />
           <SidebarLink to="/settings" icon={SettingsIcon} label="사이트 설정" />
         </nav>
@@ -666,6 +819,7 @@ export default function Admin() {
              <Route path="/" element={<DashboardHome />} />
              <Route path="/products" element={<ProductManagement />} />
              <Route path="/posts" element={<PostManagement />} />
+             <Route path="/home-ui" element={<HomeManagement />} />
              <Route path="/franchise" element={<FranchiseManagement />} />
              <Route path="/settings" element={<SettingsManagement />} />
            </Routes>

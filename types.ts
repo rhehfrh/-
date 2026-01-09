@@ -20,6 +20,20 @@ export interface Post {
   imageUrl: string;
 }
 
+export interface HomeFeature {
+  id: string;
+  iconName: 'Smartphone' | 'TrendingUp' | 'ShieldCheck' | 'Award' | 'Zap' | 'Smile' | 'Heart' | 'Check';
+  title: string;
+  description: string;
+}
+
+export interface HomeTestimonial {
+  id: string;
+  name: string;
+  content: string;
+  rating: number;
+}
+
 export interface SiteSettings {
   siteName: string;
   contactNumber: string;
@@ -28,6 +42,8 @@ export interface SiteSettings {
   kakaoId: string;
   heroTitle: string;
   heroSubtitle: string;
+  features: HomeFeature[];
+  testimonials: HomeTestimonial[];
 }
 
 export interface FranchiseInquiry {
