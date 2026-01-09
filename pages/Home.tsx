@@ -55,6 +55,17 @@ export default function Home() {
     <div className="relative overflow-hidden">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center px-4 pt-20 overflow-hidden bg-black">
+        {/* Top Left Badge Image */}
+        {settings?.heroBadgeUrl && (
+          <div className="absolute top-28 left-8 z-20 animate-bounce duration-[3000ms]">
+            <img 
+              src={settings.heroBadgeUrl} 
+              alt="Badge" 
+              className="w-16 h-16 md:w-24 md:h-24 object-contain filter drop-shadow-[0_0_15px_rgba(147,51,234,0.5)]"
+            />
+          </div>
+        )}
+
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -63,7 +74,6 @@ export default function Home() {
             className="w-full h-full object-cover opacity-60"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black"></div>
-          {/* Use inline style for radial gradient to ensure compatibility */}
           <div 
             className="absolute inset-0 opacity-50"
             style={{ background: 'radial-gradient(circle at center, transparent 0%, black 100%)' }}

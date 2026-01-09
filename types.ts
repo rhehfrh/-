@@ -43,6 +43,7 @@ export interface SiteSettings {
   heroTitle: string;
   heroSubtitle: string;
   heroImageUrl: string;
+  heroBadgeUrl: string; // 상단 왼쪽 작은 이미지 필드 추가
   features: HomeFeature[];
   testimonials: HomeTestimonial[];
 }
